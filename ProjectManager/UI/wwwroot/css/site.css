@@ -1,3 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+a {
+  all: unset;
+}
+
+body {
+  font-family: 'Work Sans', sans-serif;
+}
+
+header {
+  background-color: #9ce1ef;
+}
+
+body {
+  background-color: #b6effb;
+}
+
 html {
   font-size: 14px;
 }
