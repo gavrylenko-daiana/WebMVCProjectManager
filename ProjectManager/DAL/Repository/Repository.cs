@@ -6,10 +6,10 @@ namespace DAL.Repository
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
-        private readonly AppContext _context;
+        private readonly ApplicationContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public Repository(AppContext context)
+        public Repository(ApplicationContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();

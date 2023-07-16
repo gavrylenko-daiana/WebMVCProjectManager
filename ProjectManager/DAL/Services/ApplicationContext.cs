@@ -6,18 +6,18 @@ using Microsoft.Extensions.Configuration;
 
 namespace DAL;
 
-public class AppContext : DbContext
+public class ApplicationContext : DbContext
 {
-    public AppContext(DbContextOptions<AppContext> options) : base(options)
+    public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
         // Database.EnsureCreated();
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseLazyLoadingProxies()
-            .UseSqlServer("Server=localhost;Database=ProjectManager;User=sa;Password=reallyStrongPwd123;TrustServerCertificate=True;");
-    }
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     optionsBuilder.UseLazyLoadingProxies()
+    //         .UseSqlServer("Server=localhost;Database=WebProjectManager;User=sa;Password=reallyStrongPwd123;TrustServerCertificate=True;");
+    // }
     
     public DbSet<User> Users { get; set; }
     public DbSet<Project> Projects { get; set; }
