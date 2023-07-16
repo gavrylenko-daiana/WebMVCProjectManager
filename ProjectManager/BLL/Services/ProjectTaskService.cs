@@ -217,6 +217,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
                 foreach (var task in tasks)
                 {
                     var userTask = task.AssignedUsers.FirstOrDefault(ut => ut.User.Role == UserRole.Tester);
+                    
                     if (userTask != null)
                     {
                         task.AssignedUsers.Remove(userTask);
@@ -242,6 +243,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
                 foreach (var task in tasks)
                 {
                     var userTask = task.AssignedUsers.FirstOrDefault(ut => ut.User.Role == UserRole.Developer);
+                    
                     if (userTask != null)
                     {
                         task.AssignedUsers.Remove(userTask);

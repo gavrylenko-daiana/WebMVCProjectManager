@@ -16,7 +16,7 @@ public class AppContextFactory : IDesignTimeDbContextFactory<AppContext>
     {
         var builder = new ConfigurationBuilder();
         builder.SetBasePath(Directory.GetCurrentDirectory());
-        builder.AddJsonFile("/Users/dayanagavrylenko/Desktop/Web/dotNet/DbTechnicalTask/DbTechnicalTask/ProjectManager/UI/bin/Debug/net6.0/appsettings.json");
+        builder.AddJsonFile("/Users/dayanagavrylenko/Desktop/Web/dotNet/DbTechnicalTask/DbTechnicalTask/ProjectManager/UIConsole/bin/Debug/net6.0/appsettings.json");
         var config = builder.Build();
         string connectionString = config.GetConnectionString("DefaultConnection");
 

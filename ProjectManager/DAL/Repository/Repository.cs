@@ -1,15 +1,13 @@
-using System.Linq.Expressions;
-using Newtonsoft.Json;
 using Core.Models;
 using DAL.Abstractions.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.Services
+namespace DAL.Repository
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
-        private AppContext _context;
-        private Microsoft.EntityFrameworkCore.DbSet<T> _dbSet;
+        private readonly AppContext _context;
+        private readonly DbSet<T> _dbSet;
 
         public Repository(AppContext context)
         {
