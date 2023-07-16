@@ -19,7 +19,7 @@ public class ApplicationContext : DbContext
     //         .UseSqlServer("Server=localhost;Database=WebProjectManager;User=sa;Password=reallyStrongPwd123;TrustServerCertificate=True;");
     // }
     
-    public DbSet<User> Users { get; set; }
+    public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectTask> ProjectTasks { get; set; }
     public DbSet<TaskFile> TaskFiles { get; set; }

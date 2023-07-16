@@ -3,15 +3,15 @@ using Core.Models;
 
 namespace BLL.Abstractions.Interfaces;
 
-public interface IStakeHolderService : IGenericService<User>
+public interface IStakeHolderService : IGenericService<AppUser>
 {
     Task UpdateProjectByTask(ProjectTask task);
 
     Task DeleteProjectAsync(string projectName);
 
-    Task DeleteStakeHolder(User stakeHolder);
+    Task DeleteStakeHolder(AppUser stakeHolder);
 
-    Task<List<Project>> GetProjectsByStakeHolder(User stakeHolder);
+    Task<List<Project>> GetProjectsByStakeHolder(AppUser stakeHolder);
 
     Task DeleteCurrentTask(ProjectTask task);
 
@@ -19,13 +19,13 @@ public interface IStakeHolderService : IGenericService<User>
 
     Task<DateTime> UpdateDueDateInProjectAsync(string[] date);
 
-    Task CreateProjectAsync(string projectName, string projectDescription, User stakeHolder,
+    Task CreateProjectAsync(string projectName, string projectDescription, AppUser stakeHolder,
         DateTime enteredDate);
 
-    Task<User> GetTesterByNameAsync(string name);
+    Task<AppUser> GetTesterByNameAsync(string name);
 
     Task<ProjectTask> CreateTask(string taskName, string taskDescription, DateTime term, Priority priority,
-        User tester, User stakeHolder, Project project);
+        AppUser tester, AppUser stakeHolder, Project project);
 
     Task AddTaskToProjectAsync(Project project, List<ProjectTask> tasks);
 
@@ -37,5 +37,5 @@ public interface IStakeHolderService : IGenericService<User>
 
     Task<bool> ProjectTaskIsAlreadyExistAsync(string taskName);
 
-    Task<User> GetStakeHolderByProject(Project project);
+    Task<AppUser> GetStakeHolderByProject(Project project);
 }

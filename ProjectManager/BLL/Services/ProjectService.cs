@@ -54,7 +54,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         }
     }
 
-    public async Task<List<Project>> GetProjectsByStakeHolder(User stakeHolder)
+    public async Task<List<Project>> GetProjectsByStakeHolder(AppUser stakeHolder)
     {
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
 
@@ -72,7 +72,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         }
     }
 
-    private async Task<List<Project>> GetProjectByTester(User tester)
+    private async Task<List<Project>> GetProjectByTester(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
         
@@ -273,7 +273,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         }
     }
 
-    public async Task DeleteProjectsWithSteakHolderAsync(User stakeHolder)
+    public async Task DeleteProjectsWithSteakHolderAsync(AppUser stakeHolder)
     {
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
         
@@ -316,7 +316,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         }
     }
 
-    public async Task CreateProject(string projectName, string projectDescription, User stakeHolder,
+    public async Task CreateProject(string projectName, string projectDescription, AppUser stakeHolder,
         DateTime enteredDate)
     {
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
@@ -358,7 +358,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         }
     }
 
-    public async Task DeleteTesterFromProjectsAsync(User tester)
+    public async Task DeleteTesterFromProjectsAsync(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
         
@@ -411,7 +411,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         }
     }
     
-    public Task<User> GetStakeHolderByProject(Project project)
+    public Task<AppUser> GetStakeHolderByProject(Project project)
     {
         try
         {
@@ -425,7 +425,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         }
     }
 
-    public Task<User> GetTesterFromProject(Project project)
+    public Task<AppUser> GetTesterFromProject(Project project)
     {
         try
         {

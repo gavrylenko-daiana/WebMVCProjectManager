@@ -8,7 +8,7 @@ public interface IProjectService : IGenericService<Project>
 
     Task<Project> GetProjectByName(string projectName);
 
-    Task<List<Project>> GetProjectsByStakeHolder(User stakeHolder);
+    Task<List<Project>> GetProjectsByStakeHolder(AppUser stakeHolder);
 
     Task<Project> GetProjectByTask(ProjectTask task);
 
@@ -28,20 +28,20 @@ public interface IProjectService : IGenericService<Project>
 
     Task DeleteProject(string projectName);
 
-    Task DeleteProjectsWithSteakHolderAsync(User stakeHolder);
+    Task DeleteProjectsWithSteakHolderAsync(AppUser stakeHolder);
 
     Task DeleteCurrentTaskAsync(ProjectTask task);
 
-    Task CreateProject(string projectName, string projectDescription, User stakeHolder,
+    Task CreateProject(string projectName, string projectDescription, AppUser stakeHolder,
         DateTime enteredDate);
 
     Task AddTaskToProject(Project project, List<ProjectTask> tasks);
 
-    Task DeleteTesterFromProjectsAsync(User tester);
+    Task DeleteTesterFromProjectsAsync(AppUser tester);
 
     Task UpdateTask(ProjectTask task, List<ProjectTask> modifierTasks, Project project, ProjectTask newTask);
     
-    Task<User> GetStakeHolderByProject(Project project);
+    Task<AppUser> GetStakeHolderByProject(Project project);
 
-    Task<User> GetTesterFromProject(Project project);
+    Task<AppUser> GetTesterFromProject(Project project);
 }

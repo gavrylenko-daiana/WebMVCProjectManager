@@ -5,18 +5,18 @@ using DAL.Abstractions.Interfaces;
 
 namespace BLL.Services;
 
-public class TesterService : GenericService<User>, ITesterService
+public class TesterService : GenericService<AppUser>, ITesterService
 {
     private readonly IProjectService _projectService;
     private readonly IProjectTaskService _projectTaskService;
 
-    public TesterService(IRepository<User> repository, IProjectService projectService, IProjectTaskService projectTaskService) : base(repository)
+    public TesterService(IRepository<AppUser> repository, IProjectService projectService, IProjectTaskService projectTaskService) : base(repository)
     {
         _projectService = projectService;
         _projectTaskService = projectTaskService;
     }
 
-    public async Task<IEnumerable<User>> GetAllTester()
+    public async Task<IEnumerable<AppUser>> GetAllTester()
     {
         try
         {
@@ -30,7 +30,7 @@ public class TesterService : GenericService<User>, ITesterService
         }
     }
     
-    public async Task<User> GetTesterByName(string testerName)
+    public async Task<AppUser> GetTesterByName(string testerName)
     {
         if (string.IsNullOrWhiteSpace(testerName)) throw new Exception(nameof(testerName));
         
@@ -77,7 +77,7 @@ public class TesterService : GenericService<User>, ITesterService
         }
     }
     
-    public async Task<List<ProjectTask>> GetTesterTasksAsync(User tester)
+    public async Task<List<ProjectTask>> GetTesterTasksAsync(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
         
@@ -145,7 +145,7 @@ public class TesterService : GenericService<User>, ITesterService
         }
     }
     
-    public async Task DeleteTesterAsync(User tester)
+    public async Task DeleteTesterAsync(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
         
@@ -161,7 +161,7 @@ public class TesterService : GenericService<User>, ITesterService
         }
     }
     
-    public async Task<List<ProjectTask>> GetWaitTasksByTesterAsync(User tester)
+    public async Task<List<ProjectTask>> GetWaitTasksByTesterAsync(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
         
@@ -177,7 +177,7 @@ public class TesterService : GenericService<User>, ITesterService
         }
     }
     
-    public Task<User> GetDeveloperFromTask(ProjectTask task)
+    public Task<AppUser> GetDeveloperFromTask(ProjectTask task)
     {
         try
         {
@@ -192,7 +192,7 @@ public class TesterService : GenericService<User>, ITesterService
         }
     }
     
-    public Task<User> GetTesterFromTask(ProjectTask task)
+    public Task<AppUser> GetTesterFromTask(ProjectTask task)
     {
         try
         {

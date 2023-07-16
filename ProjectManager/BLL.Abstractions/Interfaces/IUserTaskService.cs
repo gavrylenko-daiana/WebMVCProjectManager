@@ -4,7 +4,7 @@ namespace BLL.Abstractions.Interfaces;
 
 public interface IUserTaskService : IGenericService<UserTask>
 {
-    Task AddUserTask(User user, ProjectTask task);
+    Task AddUserTask(AppUser user, ProjectTask task);
 
     Task<UserTask> GetUserTaskByUserIdAndTaskId(Guid userId, Guid taskId);
 

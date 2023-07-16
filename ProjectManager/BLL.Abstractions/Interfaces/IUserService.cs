@@ -3,13 +3,13 @@ using Core.Models;
 
 namespace BLL.Abstractions.Interfaces;
 
-public interface IUserService : IGenericService<User>
+public interface IUserService : IGenericService<AppUser>
 {
     Task<bool> UsernameIsAlreadyExist(string name);
     
-    Task<User> Authenticate(string userInput);
+    Task<AppUser> Authenticate(string userInput);
 
-    Task<User> GetUserByUsernameOrEmail(string input);
+    Task<AppUser> GetUserByUsernameOrEmail(string input);
 
     Task UpdatePassword(Guid getUserId, string newUserPassword);
 

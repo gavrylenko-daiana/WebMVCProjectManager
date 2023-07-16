@@ -45,7 +45,7 @@ public class UserTaskService : GenericService<UserTask>, IUserTaskService
         }
     }
     
-    public async Task AddUserTask(User user, ProjectTask task)
+    public async Task AddUserTask(AppUser user, ProjectTask task)
     {
         if (user == null) throw new ArgumentNullException(nameof(user));
         if (task == null) throw new ArgumentNullException(nameof(task));

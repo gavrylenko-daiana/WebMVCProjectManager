@@ -10,5 +10,5 @@ public interface IUserProjectService : IGenericService<UserProject>
 
     Task<UserProject> GetUserProjectByUserIdAndProjectId(Guid userId, Guid projectId);
 
-    Task AddUserProject(User user, Project project);
+    Task AddUserProject(AppUser user, Project project);
 }

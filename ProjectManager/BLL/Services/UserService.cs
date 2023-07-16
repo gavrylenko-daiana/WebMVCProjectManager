@@ -10,11 +10,11 @@ using DAL.Abstractions.Interfaces;
 
 namespace BLL.Services;
 
-public class UserService : GenericService<User>, IUserService
+public class UserService : GenericService<AppUser>, IUserService
 {
     private readonly IProjectTaskService _projectTaskService;
     
-    public UserService(IRepository<User> repository, IProjectTaskService projectTaskService) : base(repository)
+    public UserService(IRepository<AppUser> repository, IProjectTaskService projectTaskService) : base(repository)
     {
         _projectTaskService = projectTaskService;
     }
@@ -35,13 +35,13 @@ public class UserService : GenericService<User>, IUserService
         }
     }
  
-    public async Task<User> Authenticate(string userInput)
+    public async Task<AppUser> Authenticate(string userInput)
     {
         if (string.IsNullOrWhiteSpace(userInput)) throw new ArgumentNullException(nameof(userInput));
         
         try
         {
-            User user = await GetByPredicate(u => u.Username == userInput || u.Email == userInput);
+            AppUser user = await GetByPredicate(u => u.Username == userInput || u.Email == userInput);
 
             if (user == null) throw new ArgumentNullException(nameof(user));
 
@@ -53,13 +53,13 @@ public class UserService : GenericService<User>, IUserService
         }
     }
 
-    public async Task<User> GetUserByUsernameOrEmail(string input)
+    public async Task<AppUser> GetUserByUsernameOrEmail(string input)
     {
         if (string.IsNullOrWhiteSpace(input)) throw new ArgumentNullException(nameof(input));
         
         try
         {
-            User user = await GetByPredicate(u => u.Username == input || u.Email == input);
+            AppUser user = await GetByPredicate(u => u.Username == input || u.Email == input);
         
             if (user == null) throw new ArgumentNullException(nameof(user));
 
@@ -78,7 +78,7 @@ public class UserService : GenericService<User>, IUserService
 
         try
         {
-            User user = await GetById(userId);
+            AppUser user = await GetById(userId);
 
             if (user == null) throw new ArgumentNullException(nameof(user));
 
@@ -201,7 +201,7 @@ public class UserService : GenericService<User>, IUserService
 
         try
         {
-            await Add(new User
+            await Add(new AppUser
             {
                 Username = userName,
                 Email = userEmail,

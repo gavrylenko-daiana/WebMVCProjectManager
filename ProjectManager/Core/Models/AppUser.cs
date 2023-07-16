@@ -2,7 +2,7 @@ using Core.Enums;
 
 namespace Core.Models;
 
-public class User : BaseEntity
+public class AppUser : BaseEntity
 {
     public string Username { get; set; }
     public string Email { get; set; }

@@ -1,10 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using UI.ConsoleManagers;
-using UI.Interfaces;
+// using Microsoft.EntityFrameworkCore;
+// using Microsoft.Extensions.Configuration;
+// using Microsoft.Extensions.DependencyInjection;
+// using UI.ConsoleManagers;
+// using UI.Interfaces;
 
-namespace UI;
+// namespace UI;
 
 // public class DependencyRegistration
 // {

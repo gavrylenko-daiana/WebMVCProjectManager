@@ -87,7 +87,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task<List<ProjectTask>> GetTasksByDeveloper(User developer)
+    public async Task<List<ProjectTask>> GetTasksByDeveloper(AppUser developer)
     {
         if (developer == null) throw new ArgumentNullException(nameof(developer));
 
@@ -105,7 +105,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task<List<ProjectTask>> GetTasksAnotherDeveloper(User developer)
+    public async Task<List<ProjectTask>> GetTasksAnotherDeveloper(AppUser developer)
     {
         if (developer == null) throw new ArgumentNullException(nameof(developer));
 
@@ -127,7 +127,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task<List<ProjectTask>> GetTasksByTester(User tester)
+    public async Task<List<ProjectTask>> GetTasksByTester(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
 
@@ -145,7 +145,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task<List<ProjectTask>> GetWaitTasksByTester(User tester)
+    public async Task<List<ProjectTask>> GetWaitTasksByTester(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
 
@@ -204,7 +204,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task DeleteTesterFromTasksAsync(User tester)
+    public async Task DeleteTesterFromTasksAsync(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
 
@@ -356,7 +356,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
     }
 
     public async Task<ProjectTask> CreateTaskAsync(string taskName, string taskDescription, DateTime term,
-        Priority priority, User tester, User stakeHolder, Project project)
+        Priority priority, AppUser tester, AppUser stakeHolder, Project project)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
@@ -391,7 +391,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public Task<User> GetDeveloperFromTask(ProjectTask task)
+    public Task<AppUser> GetDeveloperFromTask(ProjectTask task)
     {
         try
         {
@@ -406,7 +406,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public Task<User> GetTesterFromTask(ProjectTask task)
+    public Task<AppUser> GetTesterFromTask(ProjectTask task)
     {
         try
         {

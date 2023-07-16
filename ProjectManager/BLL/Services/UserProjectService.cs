@@ -61,7 +61,7 @@ public class UserProjectService : GenericService<UserProject>, IUserProjectServi
         }
     }
 
-    public async Task AddUserProject(User user, Project project)
+    public async Task AddUserProject(AppUser user, Project project)
     {
         if (user == null) throw new ArgumentNullException(nameof(user));
         if (project == null) throw new ArgumentNullException(nameof(project));

@@ -5,14 +5,14 @@ using DAL.Abstractions.Interfaces;
 
 namespace BLL.Services;
 
-public class DeveloperService : GenericService<User>, IDeveloperService
+public class DeveloperService : GenericService<AppUser>, IDeveloperService
 {
     private readonly IProjectService _projectService;
     private readonly IProjectTaskService _projectTaskService;
     private readonly IUserProjectService _userProjectService;
     private readonly IUserTaskService _userTask;
 
-    public DeveloperService(IRepository<User> repository, IProjectService projectService,
+    public DeveloperService(IRepository<AppUser> repository, IProjectService projectService,
         IProjectTaskService projectTaskService, IUserProjectService userProjectService, IUserTaskService userTask) : base(repository)
     {
         _projectService = projectService;
@@ -21,13 +21,13 @@ public class DeveloperService : GenericService<User>, IDeveloperService
         _userTask = userTask;
     }
 
-    public async Task<User> GetDeveloperByUsernameOrEmail(string? input)
+    public async Task<AppUser> GetDeveloperByUsernameOrEmail(string? input)
     {
         if (string.IsNullOrWhiteSpace(input)) throw new ArgumentNullException(nameof(input));
 
         try
         {
-            User stakeHolder = await GetByPredicate(u =>
+            AppUser stakeHolder = await GetByPredicate(u =>
                 u.Role == UserRole.Developer && (u.Username == input || u.Email == input));
 
             if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
@@ -40,7 +40,7 @@ public class DeveloperService : GenericService<User>, IDeveloperService
         }
     }
 
-    public async Task<IEnumerable<User>> GetAllDeveloper()
+    public async Task<IEnumerable<AppUser>> GetAllDeveloper()
     {
         try
         {
@@ -134,7 +134,7 @@ public class DeveloperService : GenericService<User>, IDeveloperService
         }
     }
 
-    public async Task TakeTaskByDeveloper(ProjectTask task, User developer, Project project)
+    public async Task TakeTaskByDeveloper(ProjectTask task, AppUser developer, Project project)
     {
         if (task == null) throw new ArgumentNullException(nameof(task));
         if (developer == null) throw new ArgumentNullException(nameof(developer));
@@ -167,7 +167,7 @@ public class DeveloperService : GenericService<User>, IDeveloperService
         }
     }
 
-    public async Task<List<ProjectTask>> GetDeveloperTasks(User developer)
+    public async Task<List<ProjectTask>> GetDeveloperTasks(AppUser developer)
     {
         if (developer == null) throw new ArgumentNullException(nameof(developer));
 
@@ -183,7 +183,7 @@ public class DeveloperService : GenericService<User>, IDeveloperService
         }
     }
 
-    public async Task<List<ProjectTask>> GetTasksAnotherDeveloperAsync(User developer)
+    public async Task<List<ProjectTask>> GetTasksAnotherDeveloperAsync(AppUser developer)
     {
         if (developer == null) throw new ArgumentNullException(nameof(developer));
 
@@ -199,7 +199,7 @@ public class DeveloperService : GenericService<User>, IDeveloperService
         }
     }
 
-    public async Task DeleteDeveloperFromTasks(User developer)
+    public async Task DeleteDeveloperFromTasks(AppUser developer)
     {
         if (developer == null) throw new ArgumentNullException(nameof(developer));
 
@@ -215,7 +215,7 @@ public class DeveloperService : GenericService<User>, IDeveloperService
         }
     }
 
-    public Task<User> GetDeveloperFromTask(ProjectTask task)
+    public Task<AppUser> GetDeveloperFromTask(ProjectTask task)
     {
         try
         {

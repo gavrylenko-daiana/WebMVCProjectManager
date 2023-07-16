@@ -2,7 +2,7 @@ using Core.Models;
 
 namespace BLL.Abstractions.Interfaces;
 
-public interface IDeveloperService : IGenericService<User>
+public interface IDeveloperService : IGenericService<AppUser>
 {
     Task UpdateProjectByTask(ProjectTask task);
 
@@ -10,15 +10,15 @@ public interface IDeveloperService : IGenericService<User>
 
     Task<Project> GetProjectByNameAsync(string projectName);
 
-    Task TakeTaskByDeveloper(ProjectTask task, User developer, Project project);
+    Task TakeTaskByDeveloper(ProjectTask task, AppUser developer, Project project);
 
     Task SendMailToUserAsync(string email, string message);
 
-    Task<List<ProjectTask>> GetDeveloperTasks(User developer);
+    Task<List<ProjectTask>> GetDeveloperTasks(AppUser developer);
 
-    Task<List<ProjectTask>> GetTasksAnotherDeveloperAsync(User developer);
+    Task<List<ProjectTask>> GetTasksAnotherDeveloperAsync(AppUser developer);
 
-    Task DeleteDeveloperFromTasks(User developer);
+    Task DeleteDeveloperFromTasks(AppUser developer);
 
-    Task<User> GetDeveloperFromTask(ProjectTask task);
+    Task<AppUser> GetDeveloperFromTask(ProjectTask task);
 }

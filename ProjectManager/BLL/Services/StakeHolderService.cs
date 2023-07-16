@@ -7,13 +7,13 @@ using ArgumentNullException = System.ArgumentNullException;
 
 namespace BLL.Services;
 
-public class StakeHolderService : GenericService<User>, IStakeHolderService
+public class StakeHolderService : GenericService<AppUser>, IStakeHolderService
 {
     private readonly IProjectService _projectService;
     private readonly ITesterService _testerService;
     private readonly IProjectTaskService _projectTaskService;
 
-    public StakeHolderService(IRepository<User> repository, IProjectService projectService,
+    public StakeHolderService(IRepository<AppUser> repository, IProjectService projectService,
         ITesterService testerService, IProjectTaskService projectTaskService) : base(repository)
     {
         _projectService = projectService;
@@ -21,13 +21,13 @@ public class StakeHolderService : GenericService<User>, IStakeHolderService
         _projectTaskService = projectTaskService;
     }
 
-    public async Task<User> GetStakeHolderByUsernameOrEmail(string input)
+    public async Task<AppUser> GetStakeHolderByUsernameOrEmail(string input)
     {
         if (string.IsNullOrWhiteSpace(input)) throw new ArgumentNullException(nameof(input));
 
         try
         {
-            User stakeHolder = await GetByPredicate(u =>
+            AppUser stakeHolder = await GetByPredicate(u =>
                 u.Role == UserRole.StakeHolder && (u.Username == input || u.Email == input));
 
             if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
@@ -69,7 +69,7 @@ public class StakeHolderService : GenericService<User>, IStakeHolderService
         }
     }
 
-    public async Task DeleteStakeHolder(User stakeHolder)
+    public async Task DeleteStakeHolder(AppUser stakeHolder)
     {
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
 
@@ -84,7 +84,7 @@ public class StakeHolderService : GenericService<User>, IStakeHolderService
         }
     }
 
-    public async Task<List<Project>> GetProjectsByStakeHolder(User stakeHolder)
+    public async Task<List<Project>> GetProjectsByStakeHolder(AppUser stakeHolder)
     {
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
 
@@ -146,7 +146,7 @@ public class StakeHolderService : GenericService<User>, IStakeHolderService
         }
     }
 
-    public async Task CreateProjectAsync(string projectName, string projectDescription, User stakeHolder,
+    public async Task CreateProjectAsync(string projectName, string projectDescription, AppUser stakeHolder,
         DateTime enteredDate)
     {
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
@@ -164,7 +164,7 @@ public class StakeHolderService : GenericService<User>, IStakeHolderService
         }
     }
 
-    public async Task<User> GetTesterByNameAsync(string name)
+    public async Task<AppUser> GetTesterByNameAsync(string name)
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
@@ -263,7 +263,7 @@ public class StakeHolderService : GenericService<User>, IStakeHolderService
     }
 
     public async Task<ProjectTask> CreateTask(string taskName, string taskDescription, DateTime term, Priority priority,
-        User tester, User stakeHolder, Project project)
+        AppUser tester, AppUser stakeHolder, Project project)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
         if (project == null) throw new ArgumentNullException(nameof(project));
@@ -285,7 +285,7 @@ public class StakeHolderService : GenericService<User>, IStakeHolderService
         }
     }
     
-    public Task<User> GetStakeHolderByProject(Project project)
+    public Task<AppUser> GetStakeHolderByProject(Project project)
     {
         try
         {

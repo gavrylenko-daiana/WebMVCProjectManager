@@ -2,13 +2,13 @@ using Core.Models;
 
 namespace BLL.Abstractions.Interfaces;
 
-public interface ITesterService : IGenericService<User>
+public interface ITesterService : IGenericService<AppUser>
 {
-    Task<IEnumerable<User>> GetAllTester();
+    Task<IEnumerable<AppUser>> GetAllTester();
 
-    Task<User> GetTesterByName(string testerName);
+    Task<AppUser> GetTesterByName(string testerName);
 
-    Task<List<ProjectTask>> GetTesterTasksAsync(User tester);
+    Task<List<ProjectTask>> GetTesterTasksAsync(AppUser tester);
 
     Task AddCompletedTask(ProjectTask task);
 
@@ -16,13 +16,13 @@ public interface ITesterService : IGenericService<User>
 
     Task SendMailToUserAsync(string email, string message);
 
-    Task<List<ProjectTask>> GetWaitTasksByTesterAsync(User tester);
+    Task<List<ProjectTask>> GetWaitTasksByTesterAsync(AppUser tester);
 
     Task UpdateProjectByTask(ProjectTask task);
 
-    Task DeleteTesterAsync(User tester);
+    Task DeleteTesterAsync(AppUser tester);
 
-    Task<User> GetDeveloperFromTask(ProjectTask task);
+    Task<AppUser> GetDeveloperFromTask(ProjectTask task);
 
-    Task<User> GetTesterFromTask(ProjectTask task);
+    Task<AppUser> GetTesterFromTask(ProjectTask task);
 }

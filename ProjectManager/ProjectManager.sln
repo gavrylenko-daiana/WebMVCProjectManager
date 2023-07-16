@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIConsole", "UIConsole\UIConsole.csproj", "{52ADF7D5-DE40-4032-BA54-F62AAE338408}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{513BE60C-769E-4E6C-9C30-F7AE31E541C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{0B4C86CC-BF09-40CF-B750-D27451D04C7D}"
@@ -20,10 +18,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{52ADF7D5-DE40-4032-BA54-F62AAE338408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52ADF7D5-DE40-4032-BA54-F62AAE338408}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52ADF7D5-DE40-4032-BA54-F62AAE338408}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52ADF7D5-DE40-4032-BA54-F62AAE338408}.Release|Any CPU.Build.0 = Release|Any CPU
 		{513BE60C-769E-4E6C-9C30-F7AE31E541C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{513BE60C-769E-4E6C-9C30-F7AE31E541C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{513BE60C-769E-4E6C-9C30-F7AE31E541C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
