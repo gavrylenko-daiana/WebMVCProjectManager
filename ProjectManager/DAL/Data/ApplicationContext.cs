@@ -1,12 +1,10 @@
 using Core.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Configuration;
 
-namespace DAL;
+namespace DAL.Data;
 
-public class ApplicationContext : DbContext
+public class ApplicationContext : IdentityDbContext<AppUser>
 {
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
@@ -18,7 +16,7 @@ public class ApplicationContext : DbContext
     //     optionsBuilder.UseLazyLoadingProxies()
     //         .UseSqlServer("Server=localhost;Database=WebProjectManager;User=sa;Password=reallyStrongPwd123;TrustServerCertificate=True;");
     // }
-    
+
     public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectTask> ProjectTasks { get; set; }

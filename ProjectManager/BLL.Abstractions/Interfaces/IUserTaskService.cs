@@ -6,7 +6,7 @@ public interface IUserTaskService : IGenericService<UserTask>
 {
     Task AddUserTask(AppUser user, ProjectTask task);
 
-    Task<UserTask> GetUserTaskByUserIdAndTaskId(Guid userId, Guid taskId);
+    Task<UserTask> GetUserTaskByUserIdAndTaskId(string? userId, Guid taskId);
 
-    Task<bool> IsUserInTask(Guid userId, Guid taskId);
+    Task<bool> IsUserInTask(string? userId, Guid taskId);
 }

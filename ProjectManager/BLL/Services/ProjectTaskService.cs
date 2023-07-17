@@ -179,7 +179,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task<Priority> GetPriority(int choice, Priority priority)
+    public Task<Priority> GetPriority(int choice, Priority priority)
     {
         if (!Enum.IsDefined(typeof(Priority), priority))
             throw new InvalidEnumArgumentException(nameof(priority), (int)priority, typeof(Priority));
@@ -194,9 +194,10 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
                 3 => Priority.Medium,
                 4 => Priority.Low,
                 5 => Priority.Minor,
+                _ => throw new ArgumentOutOfRangeException(nameof(choice), choice, null)
             };
 
-            return priority;
+            return Task.FromResult(priority);
         }
         catch (Exception ex)
         {

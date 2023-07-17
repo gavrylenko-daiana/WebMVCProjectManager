@@ -26,9 +26,9 @@ public class UserProjectService : GenericService<UserProject>, IUserProjectServi
         }
     }
 
-    public async Task<bool> IsUserInProject(Guid userId, Guid projectId)
+    public async Task<bool> IsUserInProject(string? userId, Guid projectId)
     {
-        if (userId == Guid.Empty) throw new Exception(nameof(userId));
+        if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentNullException(nameof(userId));
         if (projectId == Guid.Empty) throw new Exception(nameof(projectId));
 
         try
@@ -43,9 +43,9 @@ public class UserProjectService : GenericService<UserProject>, IUserProjectServi
         }
     }
     
-    public async Task<UserProject> GetUserProjectByUserIdAndProjectId(Guid userId, Guid projectId)
+    public async Task<UserProject> GetUserProjectByUserIdAndProjectId(string? userId, Guid projectId)
     {
-        if (userId == Guid.Empty) throw new Exception(nameof(userId));
+        if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentNullException(nameof(userId));
         if (projectId == Guid.Empty) throw new Exception(nameof(projectId));
 
         try

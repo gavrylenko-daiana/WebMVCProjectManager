@@ -10,9 +10,9 @@ public class UserTaskService : GenericService<UserTask>, IUserTaskService
     {
     }
     
-    public async Task<bool> IsUserInTask(Guid userId, Guid taskId)
+    public async Task<bool> IsUserInTask(string? userId, Guid taskId)
     {
-        if (userId == Guid.Empty) throw new Exception(nameof(userId));
+        if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentNullException(nameof(userId));
         if (taskId == Guid.Empty) throw new Exception(nameof(taskId));
 
         try
@@ -27,9 +27,9 @@ public class UserTaskService : GenericService<UserTask>, IUserTaskService
         }
     }
     
-    public async Task<UserTask> GetUserTaskByUserIdAndTaskId(Guid userId, Guid taskId)
+    public async Task<UserTask> GetUserTaskByUserIdAndTaskId(string? userId, Guid taskId)
     {
-        if (userId == Guid.Empty) throw new Exception(nameof(userId));
+        if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentNullException(nameof(userId));
         if (taskId == Guid.Empty) throw new Exception(nameof(taskId));
 
         try

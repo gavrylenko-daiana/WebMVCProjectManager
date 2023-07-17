@@ -28,7 +28,7 @@ public class DeveloperService : GenericService<AppUser>, IDeveloperService
         try
         {
             AppUser stakeHolder = await GetByPredicate(u =>
-                u.Role == UserRole.Developer && (u.Username == input || u.Email == input));
+                u.Role == UserRole.Developer && (u.UserName == input || u.Email == input));
 
             if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
 
@@ -207,7 +207,7 @@ public class DeveloperService : GenericService<AppUser>, IDeveloperService
         {
             var tasks = await GetDeveloperTasks(developer);
             await _projectTaskService.DeleteDeveloperFromTasksAsync(tasks);
-            await Delete(developer.Id);
+            await DeleteIdentity(developer.Id);
         }
         catch (Exception ex)
         {

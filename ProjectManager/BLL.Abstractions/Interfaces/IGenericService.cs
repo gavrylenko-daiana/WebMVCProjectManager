@@ -2,11 +2,17 @@ using Core.Models;
 
 namespace BLL.Abstractions.Interfaces;
 
-public interface IGenericService<T> where T : BaseEntity
+public interface IGenericService<T>
 {
     Task Add(T obj);
+    
+    // Task AddUserToRole(T obj, string role);
+    //
+    // Task<bool> IsUserInRoleAsync(AppUser user, string role);
 
     Task Delete(Guid id);
+    
+    Task DeleteIdentity(string id);
 
     Task<T> GetById(Guid id);
 

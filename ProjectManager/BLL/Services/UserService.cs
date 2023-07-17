@@ -25,7 +25,7 @@ public class UserService : GenericService<AppUser>, IUserService
         
         try
         {
-            var check = (await GetAll()).Any(u => u.Username == userInput || u.Email == userInput);
+            var check = (await GetAll()).Any(u => u.UserName == userInput || u.Email == userInput);
 
             return check;
         }
@@ -41,7 +41,7 @@ public class UserService : GenericService<AppUser>, IUserService
         
         try
         {
-            AppUser user = await GetByPredicate(u => u.Username == userInput || u.Email == userInput);
+            AppUser user = await GetByPredicate(u => u.UserName == userInput || u.Email == userInput);
 
             if (user == null) throw new ArgumentNullException(nameof(user));
 
@@ -59,7 +59,7 @@ public class UserService : GenericService<AppUser>, IUserService
         
         try
         {
-            AppUser user = await GetByPredicate(u => u.Username == input || u.Email == input);
+            AppUser user = await GetByPredicate(u => u.UserName == input || u.Email == input);
         
             if (user == null) throw new ArgumentNullException(nameof(user));
 
@@ -190,7 +190,7 @@ public class UserService : GenericService<AppUser>, IUserService
             throw new Exception(ex.Message);
         }
     }
-    
+
     public async Task AddNewUser(string userName, string userEmail, string password, UserRole role)
     {
         if (string.IsNullOrWhiteSpace(userName)) throw new ArgumentNullException(nameof(userName));
@@ -203,7 +203,7 @@ public class UserService : GenericService<AppUser>, IUserService
         {
             await Add(new AppUser
             {
-                Username = userName,
+                UserName = userName,
                 Email = userEmail,
                 PasswordHash = GetPasswordHash(password),
                 Role = role

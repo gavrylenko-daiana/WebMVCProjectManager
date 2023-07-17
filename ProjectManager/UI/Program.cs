@@ -1,8 +1,11 @@
 using BLL.Abstractions.Interfaces;
 using BLL.Services;
-using DAL;
+using Core.Models;
 using DAL.Abstractions.Interfaces;
+using DAL.Data;
 using DAL.Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +28,18 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
         .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationContext>();
+// builder.Services.AddMemoryCache();
+// builder.Services.AddSession();
+// builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+//----
+// builder.Services.AddScoped<UserManager<AppUser>>();
+//----
+
 var app = builder.Build();
+
+await Seed.SeedData(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -43,7 +57,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

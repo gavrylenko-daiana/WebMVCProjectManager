@@ -36,7 +36,7 @@ public class TesterService : GenericService<AppUser>, ITesterService
         
         try
         {
-            var tester = await GetByPredicate(u => u.Username == testerName && u.Role == UserRole.Tester);
+            var tester = await GetByPredicate(u => u.UserName == testerName && u.Role == UserRole.Tester);
 
             return tester;
         }
@@ -153,7 +153,7 @@ public class TesterService : GenericService<AppUser>, ITesterService
         {
             await _projectService.DeleteTesterFromProjectsAsync(tester);
             await _projectTaskService.DeleteTesterFromTasksAsync(tester);
-            await Delete(tester.Id);
+            await DeleteIdentity(tester.Id);
         }
         catch (Exception ex)
         {

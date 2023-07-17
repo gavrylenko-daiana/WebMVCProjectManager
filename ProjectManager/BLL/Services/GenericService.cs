@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using BLL.Abstractions.Interfaces;
 using Core.Models;
 using DAL.Abstractions.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace BLL.Services;
 
-public abstract class GenericService<T> : IGenericService<T> where T : BaseEntity
+public abstract class GenericService<T> : IGenericService<T>
 {
     private readonly IRepository<T> _repository;
 
@@ -35,11 +36,45 @@ public abstract class GenericService<T> : IGenericService<T> where T : BaseEntit
         }
     }
 
+    // public virtual async Task AddUserToRole(T obj, string role)
+    // {
+    //     try
+    //     {
+    //         var result = await _repository.AddToRoleAsync(obj, role);
+    //
+    //         if (!result.IsSuccessful)
+    //         {
+    //             throw new Exception($"Failed to add {typeof(T).Name}.");
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         throw new Exception($"Failed to add {typeof(T).Name}. Exception: {ex.Message}");
+    //     }
+    // }
+
     public virtual async Task Delete(Guid id)
     {
         try
         {
             var result = await _repository.DeleteAsync(id);
+
+            if (!result.IsSuccessful)
+            {
+                throw new Exception($"Failed to delete {typeof(T).Name} with Id {id}.");
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Failed to delete {typeof(T).Name} with Id {id}. Exception: {ex.Message}");
+        }
+    }
+
+    public virtual async Task DeleteIdentity(string id)
+    {
+        try
+        {
+            var result = await _repository.DeleteIdentityAsync(id);
 
             if (!result.IsSuccessful)
             {

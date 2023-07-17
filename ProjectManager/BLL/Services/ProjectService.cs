@@ -145,11 +145,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         
         try
         {
-            for (int i = 0; i < project.Tasks.Count; i++)
-            {
-                project.Tasks[i].Progress = Progress.CompletedProject;
-                await _projectTaskService.Update(project.Tasks[i].Id, project.Tasks[i]);
-            }
+            project.Progress = Progress.CompletedProject;
 
             await Update(project.Id, project);
         }
@@ -330,7 +326,8 @@ public class ProjectService : GenericService<Project>, IProjectService
             {
                 Name = projectName,
                 Description = projectDescription,
-                DueDates = enteredDate
+                DueDates = enteredDate,
+                Progress = Progress.Planned
             };
             
             await Add(project);
@@ -349,6 +346,10 @@ public class ProjectService : GenericService<Project>, IProjectService
         
         try
         {
+            if (project.Tasks.Count == 0)
+            {
+                project.Progress = Progress.InProgress;
+            }
             project.Tasks.AddRange(tasks);
             await Update(project.Id, project);
         }

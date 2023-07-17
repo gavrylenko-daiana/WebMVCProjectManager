@@ -23,5 +23,5 @@ public interface IUserService : IGenericService<AppUser>
 
     Task AddNewUser(string userName, string userEmail, string password, UserRole role);
 
-    Task<UserRole> GetRole(UserRole role, int choice);
+    // Task<UserRole> GetRole(string role, int choice);
 }

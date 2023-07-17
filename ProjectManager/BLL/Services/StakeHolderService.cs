@@ -28,7 +28,7 @@ public class StakeHolderService : GenericService<AppUser>, IStakeHolderService
         try
         {
             AppUser stakeHolder = await GetByPredicate(u =>
-                u.Role == UserRole.StakeHolder && (u.Username == input || u.Email == input));
+                u.Role == UserRole.StakeHolder && (u.UserName == input || u.Email == input));
 
             if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
 
@@ -76,7 +76,7 @@ public class StakeHolderService : GenericService<AppUser>, IStakeHolderService
         try
         {
             await _projectService.DeleteProjectsWithSteakHolderAsync(stakeHolder);
-            await Delete(stakeHolder.Id);
+            await DeleteIdentity(stakeHolder.Id);
         }
         catch (Exception ex)
         {
