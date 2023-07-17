@@ -9,14 +9,14 @@
 
 <html>
 <head>
-    <title>title</title>
+    <title>Login</title>
 </head>
 <body>
 <div class="container">
-    <div class="py-2">
+    <div class="py-4">
         <div class="col-md-6">
             <p>
-                <h4>Log in to your account</h4>
+                <h1>Login</h1>
             </p>
             @if (TempData["Error"] != null)
             {
@@ -39,7 +39,7 @@
                     </div>
                     <div class="py-2">
                         <div class="form-group">
-                            <input class="btn btn-outline-primary" type="submit" value="Log in"/>
+                            <input class="btn btn-outline-primary" type="submit" value="Login"/>
                             <a class="btn btn-outline-dark" asp-controller="Home" asp-action="Index">Cancel</a>
                         </div>
                     </div>

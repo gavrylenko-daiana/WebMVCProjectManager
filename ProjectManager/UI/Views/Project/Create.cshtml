@@ -1,0 +1,39 @@
+@using UI.ViewModels
+@using Core.Enums
+@model CreateProjectViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Project</title>
+</head>
+<body>
+<div class="container py-4">
+    <h1>Create new project</h1>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control"/>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DueDates">Deadline</label>
+            <input asp-for="DueDates" class="form-control" placeholder="DueDates" type="date" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")">
+            <span asp-validation-for="DueDates" class="text-danger"></span>
+        </div>
+        <div class="py-2">
+            <div class="form-group">
+                <input class="btn btn-outline-primary" type="submit" value="Create"/>
+                <a class="btn btn-outline-dark" asp-controller="Project" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

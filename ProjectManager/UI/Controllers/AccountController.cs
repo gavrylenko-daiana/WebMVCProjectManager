@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using BLL.Abstractions.Interfaces;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
@@ -81,7 +82,12 @@ public class AccountController : Controller
     //         TempData["Error"] = "This username is already in use";
     //         return View(registerViewModel);
     //     }
+    //
     //     
+    //     var authClaim = new List<Claim>
+    //     {
+    //         new Claim(ClaimTypes.Name, user.UserName)
+    //     };
     //     
     // }
 }

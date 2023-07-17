@@ -2,7 +2,7 @@ namespace Core.Enums;
 
 public enum Priority
 {
-    Urgent,
+    Urgent = 0,
     High,
     Medium,
     Low,

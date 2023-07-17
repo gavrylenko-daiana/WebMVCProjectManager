@@ -1,0 +1,58 @@
+@using Core.Models
+@model Project
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Detail Project</title>
+</head>
+<body>
+<div class="container py-4">
+    <div class="list-group">
+        <div class="list-group-item list-group-item-action my-2">
+            <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">@Model.Name</h3>
+                <small>@Model.DueDates.ToString("d")</small>
+            </div>
+            <p class="mb-1">@Model.Description</p>
+            <p class="mb-1">Count of done tasks: @Model.CountDoneTasks / @Model.Tasks.Count</p>
+            <div class="d-flex w-100 justify-content-between">
+                <p class="mb-1">Progress: @Model.Progress</p>
+            </div>
+            @if (Model.Tasks.Any())
+            {
+                @foreach (var task in Model.Tasks)
+                {
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <small>Task: <br> @task.Name</small>
+                        @* <a href="@Url.Action("Details", "ProjectTask", new { id = task.Id })" class="btn btn-primary btn-sm">Detail</a> *@
+                    </div>
+                }
+            }
+            @if (Model.UserProjects.Any())
+            {
+                <div class="my-2">
+                    <h6 class="mb-1">Project Users:</h6>
+                    <ul class="list-group">
+                        @foreach (var userProject in Model.UserProjects)
+                        {
+                            <li class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <div>
+                                        <h6 class="mb-0">@userProject.User.UserName</h6>
+                                        <small>@userProject.User.Email</small>
+                                    </div>
+                                    <small class="text-uppercase">@userProject.User.Role</small>
+                                </div>
+                                @* <a href="@Url.Action("Details", "AppUser", new { id = userProject.User.Id })" class="btn btn-primary btn-sm">Detail</a> *@
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+</body>
+</html>

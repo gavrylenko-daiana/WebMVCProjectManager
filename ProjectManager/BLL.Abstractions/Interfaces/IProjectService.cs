@@ -32,6 +32,8 @@ public interface IProjectService : IGenericService<Project>
 
     Task DeleteCurrentTaskAsync(ProjectTask task);
 
+    Task CreateProjectTestWithoutStakeHolderAsync(Project projectVM);
+    
     Task CreateProject(string projectName, string projectDescription, AppUser stakeHolder,
         DateTime enteredDate);
 

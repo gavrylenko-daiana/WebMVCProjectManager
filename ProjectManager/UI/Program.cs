@@ -28,7 +28,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
         .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddIdentity<AppUser, IdentityRole>()
+builder.Services.AddIdentity<AppUser, IdentityRole>().AddDefaultTokenProviders().AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationContext>();
 // builder.Services.AddMemoryCache();
 // builder.Services.AddSession();
@@ -39,7 +39,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
 
 var app = builder.Build();
 
-await Seed.SeedData(app);
+// await Seed.SeedData(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -2,7 +2,7 @@ namespace Core.Enums;
 
 public enum UserRole
 {
-    StakeHolder,
+    StakeHolder = 0,
     Tester,
     Developer,
     User

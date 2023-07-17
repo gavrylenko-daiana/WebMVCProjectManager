@@ -311,6 +311,29 @@ public class ProjectService : GenericService<Project>, IProjectService
             throw new Exception(ex.Message);
         }
     }
+    
+    public async Task CreateProjectTestWithoutStakeHolderAsync(Project projectVM)
+    {
+        if (projectVM == null) throw new ArgumentNullException(nameof(projectVM));
+
+        try
+        {
+            var project = new Project
+            {
+                Name = projectVM.Name,
+                Description = projectVM.Description,
+                DueDates = projectVM.DueDates,
+                Progress = Progress.Planned
+            };
+            
+            await Add(project);
+            // await _userProjectService.AddUserProject(stakeHolder, project);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
 
     public async Task CreateProject(string projectName, string projectDescription, AppUser stakeHolder,
         DateTime enteredDate)
@@ -385,8 +408,7 @@ public class ProjectService : GenericService<Project>, IProjectService
             throw new Exception(ex.Message);
         }
     }
-
-
+    
     public async Task UpdateTask(ProjectTask task, List<ProjectTask> modifierTasks, Project project,
         ProjectTask newTask)
     {
