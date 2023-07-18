@@ -156,27 +156,26 @@ public class ProjectTaskController : Controller
         
         return RedirectToAction("Index", "ProjectTask");
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var projectTask = await _projectTaskService.GetById(id);
+        
+        if (projectTask == null) return View("Error");
+        
+        return View(projectTask);
+    }
+    
+    [HttpPost, ActionName("Delete")]
+    public async Task<IActionResult> DeleteTask(Guid id)
+    {
+        var projectTask = await _projectTaskService.GetById(id);
+    
+        if (projectTask == null) return View("Error");
 
-
-    // [HttpGet]
-    // public async Task<IActionResult> Delete(Guid id)
-    // {
-    //     var project = await _projectService.GetById(id);
-    //     
-    //     if (project == null) return View("Error");
-    //     
-    //     return View(project);
-    // }
-    //
-    // [HttpPost, ActionName("Delete")]
-    // public async Task<IActionResult> DeleteProject(Guid id)
-    // {
-    //     var project = await _projectService.GetById(id);
-    //
-    //     if (project == null) return View("Error");
-    //
-    //     await _projectService.DeleteProject(project.Name);
-    //     
-    //     return RedirectToAction("Index", "Project");
-    // }
+        await _projectTaskService.DeleteTask(projectTask);
+        
+        return RedirectToAction("Index", "ProjectTask");
+    }
 }

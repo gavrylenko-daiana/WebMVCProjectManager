@@ -22,7 +22,6 @@ public class CreateProjectTaskViewModel
     
     [Required(ErrorMessage = "Priority is required")]
     [Display(Name = "Priority")]
-    
     public Priority Priority { get; set; }
     
     public virtual List<TaskFile> UploadedFiles { get; set; } = new List<TaskFile>();
