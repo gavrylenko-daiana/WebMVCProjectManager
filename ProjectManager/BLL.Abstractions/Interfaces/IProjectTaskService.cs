@@ -40,8 +40,7 @@ public interface IProjectTaskService : IGenericService<ProjectTask>
     
     Task<ProjectTask> CreateTaskWithoutTesterAndStakeHolderTestAsync(ProjectTask projectTask);
 
-    Task<ProjectTask> CreateTaskAsync(string taskName, string taskDescription, DateTime term,
-        Priority priority, AppUser tester, AppUser stakeHolder, Project project);
+    Task<ProjectTask> CreateTaskAsync(ProjectTask projectTask, AppUser tester, AppUser stakeHolder, Project project);
 
     Task<AppUser> GetDeveloperFromTask(ProjectTask task);
 

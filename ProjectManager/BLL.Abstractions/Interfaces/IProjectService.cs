@@ -34,8 +34,7 @@ public interface IProjectService : IGenericService<Project>
 
     Task CreateProjectTestWithoutStakeHolderAsync(Project projectVM);
     
-    Task CreateProject(string projectName, string projectDescription, AppUser stakeHolder,
-        DateTime enteredDate);
+    Task CreateProject(AppUser stakeHolder, Project project);
 
     Task AddTaskToProject(Project project, List<ProjectTask> tasks);
 

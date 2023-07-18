@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using BLL.Abstractions.Interfaces;
+using Core.Enums;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,15 @@ namespace UI.Controllers;
 public class AccountController : Controller
 {
     private readonly UserManager<AppUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly SignInManager<AppUser> _signInManager;
 
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+        RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _roleManager = roleManager;
     }
 
     [HttpGet]
@@ -47,14 +51,14 @@ public class AccountController : Controller
 
             if (singInAttempt.Succeeded)
             {
-                return RedirectToAction("Index", "Home"); // CHANGE!
+                return RedirectToAction("Index", "Project");
             }
         }
 
         TempData["Error"] = "Entered incorrect password. Please try again.";
         return View(loginViewModel);
     }
-    
+
     [HttpGet]
     public IActionResult Register()
     {
@@ -62,31 +66,76 @@ public class AccountController : Controller
         return View(register);
     }
 
-    // [HttpPost]
-    // public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
-    // {
-    //     if (!ModelState.IsValid) return View(registerViewModel);
-    //
-    //     var user = await _userManager.FindByNameAsync(registerViewModel.Username);
-    //     
-    //     if (user != null)
-    //     {
-    //         TempData["Error"] = "This username is already in use";
-    //         return View(registerViewModel);
-    //     }
-    //     
-    //     user = await _userManager.FindByEmailAsync(registerViewModel.EmailAddress);
-    //     
-    //     if (user != null)
-    //     {
-    //         TempData["Error"] = "This username is already in use";
-    //         return View(registerViewModel);
-    //     }
-    //
-    //     var authClaim = new List<Claim>
-    //     {
-    //         new Claim(ClaimTypes.Name, user.UserName)
-    //     };
-    //     
-    // }
+    [HttpPost]
+    public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+    {
+        if (!ModelState.IsValid) return View(registerViewModel);
+
+        var user = await _userManager.FindByNameAsync(registerViewModel.UserName);
+
+        if (user != null)
+        {
+            TempData["Error"] = "This username is already in use";
+            return View(registerViewModel);
+        }
+
+        user = await _userManager.FindByEmailAsync(registerViewModel.EmailAddress);
+
+        if (user != null)
+        {
+            TempData["Error"] = "This username is already in use";
+            return View(registerViewModel);
+        }
+
+        var newUser = new AppUser()
+        {
+            Email = registerViewModel.EmailAddress,
+            UserName = registerViewModel.UserName,
+            Role = registerViewModel.Role
+        };
+
+        var newUserResponse = await _userManager.CreateAsync(newUser, registerViewModel.Password);
+
+        if (!await _roleManager.RoleExistsAsync(UserRole.StakeHolder.ToString()))
+        {
+            await _roleManager.CreateAsync(new IdentityRole(UserRole.StakeHolder.ToString()));
+        }
+
+        if (!await _roleManager.RoleExistsAsync(UserRole.Tester.ToString()))
+        {
+            await _roleManager.CreateAsync(new IdentityRole(UserRole.Tester.ToString()));
+        }
+
+        if (!await _roleManager.RoleExistsAsync(UserRole.Developer.ToString()))
+        {
+            await _roleManager.CreateAsync(new IdentityRole(UserRole.Developer.ToString()));
+        }
+
+        if (newUserResponse.Succeeded)
+        {
+            var roleResult = await _userManager.AddToRoleAsync(newUser, registerViewModel.Role.ToString());
+
+            if (!roleResult.Succeeded)
+            {
+                return View("Error");
+            }
+        }
+
+        return RedirectToAction("Index", "Project");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Logout()
+    {
+        try
+        {
+            await _signInManager.SignOutAsync();
+        }
+        catch
+        {
+            return View("Error");
+        }
+
+        return RedirectToAction("Login", "Account");
+    }
 }

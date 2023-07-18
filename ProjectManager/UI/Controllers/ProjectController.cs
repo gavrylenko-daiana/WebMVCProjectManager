@@ -75,10 +75,10 @@ public class ProjectController : Controller
             {
                 Name = createProjectViewModel.Name,
                 Description = createProjectViewModel.Description,
-                DueDates = createProjectViewModel.DueDates
+                DueDates = createProjectViewModel.DueDates,
             };
 
-            await _projectService.CreateProjectTestWithoutStakeHolderAsync(project);
+            await _projectService.CreateProject(currentUser, project);
             return RedirectToAction("Index", "Project");
         }
         

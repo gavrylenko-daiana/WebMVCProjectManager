@@ -228,7 +228,7 @@ public class UserService : GenericService<AppUser>, IUserService
                 1 => UserRole.StakeHolder,
                 2 => UserRole.Developer,
                 3 => UserRole.Tester,
-                4 => UserRole.User,
+                // 4 => UserRole.User,
             };
 
             return role;

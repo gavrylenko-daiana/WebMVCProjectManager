@@ -1,4 +1,5 @@
 @using Core.Models
+@using Core.Enums
 @model IEnumerable<Project>
 
 <!DOCTYPE html>
@@ -9,9 +10,12 @@
 <body>
 <div class="container py-4">
     <div class="list-group">
-        <div>
-            <a type="button" class="btn btn-outline-danger" asp-controller="Project" asp-action="Create">Create Project</a>
-        </div>
+        @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.StakeHolder.ToString()))
+        {
+            <div>
+                <a type="button" class="btn btn-outline-danger" asp-controller="Project" asp-action="Create">Create Project</a>
+            </div>
+        }
         @foreach (var project in Model)
         {
             <div class="list-group-item list-group-item-action my-2">
@@ -20,15 +24,18 @@
                     @* <h5 class="mb-0">@project.Id</h5> *@
                     <small class="mr-2">@project.DueDates.ToString("d")</small>
                     <div class="d-flex">
-                        <div class="mx-2">
-                            <a type="button" class="btn btn-outline-danger" asp-controller="ProjectTask" asp-action="Create" asp-route-projectId="@project.Id">Create Task</a>
-                        </div>
-                        <div class="mx-2">
-                            <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id">Delete</a>
-                        </div>
-                        <div class="mx-2">
-                            <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Edit" asp-route-id="@project.Id">Edit</a>
-                        </div>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.StakeHolder.ToString()))
+                        {
+                            <div class="mx-2">
+                                <a type="button" class="btn btn-outline-danger" asp-controller="ProjectTask" asp-action="Create" asp-route-projectId="@project.Id">Create Task</a>
+                            </div>
+                            <div class="mx-2">
+                                <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id">Delete</a>
+                            </div>
+                            <div class="mx-2">
+                                <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Edit" asp-route-id="@project.Id">Edit</a>
+                            </div>
+                        }
                         <div class="mx-2">
                             <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Detail" asp-route-id="@project.Id">Detail</a>
                         </div>

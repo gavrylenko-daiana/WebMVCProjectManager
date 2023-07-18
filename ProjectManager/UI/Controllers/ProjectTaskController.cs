@@ -1,4 +1,7 @@
 using BLL.Abstractions.Interfaces;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Core.Enums;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,15 +14,15 @@ public class ProjectTaskController : Controller
     private readonly IProjectTaskService _projectTaskService;
     private readonly UserManager<AppUser> _userManager;
     private readonly IProjectService _projectService;
-    private readonly ITaskFileService _taskFileService;
+    private readonly IUploadedFileService _uploadedFileService;
 
     public ProjectTaskController(IProjectTaskService projectTaskService, UserManager<AppUser> userManager,
-        IProjectService projectService, ITaskFileService taskFileService)
+        IProjectService projectService, IUploadedFileService uploadedFileService)
     {
         _projectTaskService = projectTaskService;
         _userManager = userManager;
         _projectService = projectService;
-        _taskFileService = taskFileService;
+        _uploadedFileService = uploadedFileService;
     }
 
     [HttpGet]
@@ -68,20 +71,24 @@ public class ProjectTaskController : Controller
 
         return View();
     }
-
+    
     [HttpPost]
     public async Task<IActionResult> Create(Guid projectId, CreateProjectTaskViewModel createProjectTaskViewModel)
     {
         if (!ModelState.IsValid)
         {
             TempData["Error"] = "Entered incorrect data. Please try again.";
+            var users = _userManager.Users.Where(u => u.Role == UserRole.Tester).ToList();
+
+            ViewData["AllTester"] = users;
+            
             return View(createProjectTaskViewModel);
         }
 
         if (!await _projectTaskService.ProjectTaskIsAlreadyExist(createProjectTaskViewModel.Name))
         {
             var currentUser = await _userManager.GetUserAsync(User);
-
+            
             var projectTask = new ProjectTask()
             {
                 Name = createProjectTaskViewModel.Name,
@@ -92,6 +99,7 @@ public class ProjectTaskController : Controller
             };
 
             await _projectTaskService.CreateTaskWithoutTesterAndStakeHolderTestAsync(projectTask);
+            // await _projectTaskService.CreateTaskAsync(projectTask);
 
             return RedirectToAction("Index", "ProjectTask");
         }
@@ -206,12 +214,14 @@ public class ProjectTaskController : Controller
         
         if (project == null) return View("Error");
 
-        var uploadResult = await _taskFileService.AddFileAsync(viewModel.UploadFile);
+        var uploadResult = await _uploadedFileService.AddFileAsync(viewModel.UploadFile);
 
-        var taskFile = new TaskFile
+        var taskFile = new UploadedFile()
         {
             FileName = viewModel.UploadFile.FileName,
-            FilePath = uploadResult.Url.ToString()
+            FilePath = uploadResult.Url.ToString(),
+            ProjectTaskId = projectTask.Id,
+            ProjectTask = projectTask
         };
 
         projectTask.UploadedFiles.Add(taskFile);
@@ -220,31 +230,32 @@ public class ProjectTaskController : Controller
         {
             await _projectService.UpdateOneTaskAsync(projectTask, project);
         }
-        catch
+        catch (Exception ex)
         {
-            return View("Error");
+            throw new Exception(ex.Message);
         }
 
         return RedirectToAction("Detail");
     }
-    
-    [HttpPost]
-    public async Task<IActionResult> DeleteFile(Guid id, Guid fileId)
-    {
-        var projectTask = await _projectTaskService.GetById(id);
-        
-        if (projectTask == null) return NotFound();
 
-        var fileToDelete = projectTask.UploadedFiles.FirstOrDefault(f => f.Id == fileId);
-        
-        if (fileToDelete == null) return NotFound();
 
-        await _taskFileService.DeleteFileAsync(fileToDelete.FilePath);
-
-        projectTask.UploadedFiles.Remove(fileToDelete);
-
-        await _projectTaskService.Update(projectTask.Id, projectTask);
-
-        return RedirectToAction("Edit");
-    }
+    // [HttpPost]
+    // public async Task<IActionResult> DeleteFile(Guid id, Guid fileId)
+    // {
+    //     var projectTask = await _projectTaskService.GetById(id);
+    //     
+    //     if (projectTask == null) return NotFound();
+    //
+    //     var fileToDelete = projectTask.UploadedFiles.FirstOrDefault(f => f.Id == fileId);
+    //     
+    //     if (fileToDelete == null) return NotFound();
+    //
+    //     await _taskFileService.DeleteFileAsync(fileToDelete.FilePath);
+    //
+    //     projectTask.UploadedFiles.Remove(fileToDelete);
+    //
+    //     await _projectTaskService.Update(projectTask.Id, projectTask);
+    //
+    //     return RedirectToAction("Edit");
+    // }
 }

@@ -336,21 +336,17 @@ public class ProjectService : GenericService<Project>, IProjectService
         }
     }
 
-    public async Task CreateProject(string projectName, string projectDescription, AppUser stakeHolder,
-        DateTime enteredDate)
+    public async Task CreateProject(AppUser stakeHolder, Project projectVM)
     {
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
-        if (string.IsNullOrWhiteSpace(projectName)) throw new ArgumentNullException(nameof(projectName));
-        if (string.IsNullOrWhiteSpace(projectDescription)) throw new ArgumentNullException(nameof(projectDescription));
-        if (enteredDate == default(DateTime)) throw new ArgumentException("date cannot be empty");
-
+        
         try
         {
             var project = new Project
             {
-                Name = projectName,
-                Description = projectDescription,
-                DueDates = enteredDate,
+                Name = projectVM.Name,
+                Description = projectVM.Description,
+                DueDates = projectVM.DueDates,
                 Progress = Progress.Planned
             };
 

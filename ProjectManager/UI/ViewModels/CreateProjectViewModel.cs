@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Core.Enums;
+using Core.Models;
 
 namespace UI.ViewModels;
 
@@ -17,4 +18,8 @@ public class CreateProjectViewModel
     [Display(Name = "Deadline")]
     [DataType(DataType.Date)]
     public DateTime DueDates { get; set; }
+    
+    public AppUser StakeHolder { get; set; }
+    
+    public string StakeHolderId { get; set; }
 }

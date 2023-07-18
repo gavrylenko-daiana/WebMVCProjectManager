@@ -18,15 +18,9 @@ public interface IStakeHolderService : IGenericService<AppUser>
     Task<bool> ProjectIsAlreadyExistAsync(string projectName);
 
     Task<DateTime> UpdateDueDateInProjectAsync(string[] date);
-
-    Task CreateProjectAsync(string projectName, string projectDescription, AppUser stakeHolder,
-        DateTime enteredDate);
-
+    
     Task<AppUser> GetTesterByNameAsync(string name);
-
-    Task<ProjectTask> CreateTask(string taskName, string taskDescription, DateTime term, Priority priority,
-        AppUser tester, AppUser stakeHolder, Project project);
-
+    
     Task AddTaskToProjectAsync(Project project, List<ProjectTask> tasks);
 
     Task<Project> GetProjectByNameAsync(string projectName);

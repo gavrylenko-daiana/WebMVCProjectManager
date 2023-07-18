@@ -8,14 +8,12 @@ namespace BLL.Services;
 
 public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskService
 {
-    private readonly ITaskFileService _taskFile;
     private readonly IUserTaskService _userTask;
     private readonly IUserProjectService _userProjectService;
 
-    public ProjectTaskService(IRepository<ProjectTask> repository, ITaskFileService taskFile, IUserTaskService userTask,
+    public ProjectTaskService(IRepository<ProjectTask> repository, IUserTaskService userTask,
         IUserProjectService userProjectService) : base(repository)
     {
-        _taskFile = taskFile;
         _userTask = userTask;
         _userProjectService = userProjectService;
     }
@@ -380,28 +378,23 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task<ProjectTask> CreateTaskAsync(string taskName, string taskDescription, DateTime term,
-        Priority priority, AppUser tester, AppUser stakeHolder, Project project)
+    public async Task<ProjectTask> CreateTaskAsync(ProjectTask projectTask, AppUser tester, AppUser stakeHolder, Project project)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
         if (project == null) throw new ArgumentNullException(nameof(project));
-        if (term == default(DateTime)) throw new ArgumentException("date cannot be empty");
-        if (!Enum.IsDefined(typeof(Priority), priority))
-            throw new InvalidEnumArgumentException(nameof(priority), (int)priority, typeof(Priority));
-        if (string.IsNullOrWhiteSpace(taskName)) throw new ArgumentNullException(nameof(taskName));
-        if (string.IsNullOrWhiteSpace(taskDescription)) throw new ArgumentNullException(nameof(taskDescription));
-
+        
         try
         {
             var task = new ProjectTask
             {
-                Name = taskName,
-                Description = taskDescription,
-                DueDates = term,
-                Priority = priority,
-                ProjectId = project.Id
+                Name = projectTask.Name,
+                Description = projectTask.Description,
+                DueDates = projectTask.DueDates,
+                Priority = projectTask.Priority,
+                ProjectId = projectTask.ProjectId
             };
+            
             await Add(task);
             await _userTask.AddUserTask(stakeHolder, task);
             await _userTask.AddUserTask(tester, task);

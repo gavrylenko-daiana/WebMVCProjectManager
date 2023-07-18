@@ -20,5 +20,5 @@ public class ApplicationContext : IdentityDbContext<AppUser>
     public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectTask> ProjectTasks { get; set; }
-    public DbSet<TaskFile> TaskFiles { get; set; }
+    public DbSet<UploadedFile> UploadedFiles { get; set; }
 }

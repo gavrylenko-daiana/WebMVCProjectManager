@@ -1,5 +1,8 @@
 @using UI.ViewModels
 @using Core.Enums
+@using Core.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Collections
 @model CreateProjectTaskViewModel
 
 <!DOCTYPE html>
@@ -12,7 +15,7 @@
 <div class="container py-4">
     <h1>Create new Task</h1>
     <form method="post" asp-action="Create" enctype="multipart/form-data">
-        <input type="hidden" asp-for="ProjectId" value="@ViewData["projectId"]" />
+        <input type="hidden" asp-for="ProjectId" value="@ViewData["projectId"]"/>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Name" class="control-label"></label>
@@ -39,6 +42,13 @@
             </select>
             <span asp-validation-for="Priority" class="text-danger"></span>
         </div>
+        @if (ViewData["AllTester"] != null)
+        {
+            foreach (AppUser tester in (IEnumerable)ViewData["AllTester"])
+            {
+                // потом View User Detail с route tester.Id
+            }
+        }
         <div class="py-2">
             <div class="form-group">
                 <input class="btn btn-outline-primary" type="submit" value="Create"/>

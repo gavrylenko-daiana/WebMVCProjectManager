@@ -7,7 +7,7 @@ public class RegisterViewModel
 {
     [Required(ErrorMessage = "Username is required")]
     [Display(Name = "Username")]
-    public string Username { get; set; }
+    public string UserName { get; set; }
     
     [Required(ErrorMessage = "Email Address is required")]
     [Display(Name = "Email Address")]

@@ -145,25 +145,7 @@ public class StakeHolderService : GenericService<AppUser>, IStakeHolderService
             throw new Exception(ex.Message);
         }
     }
-
-    public async Task CreateProjectAsync(string projectName, string projectDescription, AppUser stakeHolder,
-        DateTime enteredDate)
-    {
-        if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
-        if (string.IsNullOrWhiteSpace(projectName)) throw new ArgumentNullException(nameof(projectName));
-        if (string.IsNullOrWhiteSpace(projectDescription)) throw new ArgumentNullException(nameof(projectDescription));
-        if (enteredDate == default(DateTime)) throw new ArgumentException("date cannot be empty");
-
-        try
-        {
-            await _projectService.CreateProject(projectName, projectDescription, stakeHolder, enteredDate);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
-    }
-
+    
     public async Task<AppUser> GetTesterByNameAsync(string name)
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
@@ -262,29 +244,6 @@ public class StakeHolderService : GenericService<AppUser>, IStakeHolderService
         }
     }
 
-    public async Task<ProjectTask> CreateTask(string taskName, string taskDescription, DateTime term, Priority priority,
-        AppUser tester, AppUser stakeHolder, Project project)
-    {
-        if (tester == null) throw new ArgumentNullException(nameof(tester));
-        if (project == null) throw new ArgumentNullException(nameof(project));
-        if (term == default(DateTime)) throw new ArgumentException("date cannot be empty");
-        if (!Enum.IsDefined(typeof(Priority), priority))
-            throw new InvalidEnumArgumentException(nameof(priority), (int)priority, typeof(Priority));
-        if (string.IsNullOrWhiteSpace(taskName)) throw new ArgumentNullException(nameof(taskName));
-        if (string.IsNullOrWhiteSpace(taskDescription)) throw new ArgumentNullException(nameof(taskDescription));
-
-        try
-        {
-            var task = await _projectTaskService.CreateTaskAsync(taskName, taskDescription, term, priority, tester, stakeHolder, project);
-
-            return task;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
-    }
-    
     public Task<AppUser> GetStakeHolderByProject(Project project)
     {
         try
