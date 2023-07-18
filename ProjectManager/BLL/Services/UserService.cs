@@ -165,7 +165,7 @@ public class UserService : GenericService<AppUser>, IUserService
         
         try
         {
-            await _projectTaskService.AddFileToDirectory(path, projectTask);
+            // await _projectTaskService.AddFileToDirectory(path, projectTask);
         }
         catch (Exception ex)
         {

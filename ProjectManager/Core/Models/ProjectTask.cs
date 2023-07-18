@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Core.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Core.Models;
 

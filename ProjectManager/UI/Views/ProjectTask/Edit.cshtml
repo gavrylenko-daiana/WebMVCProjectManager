@@ -3,7 +3,6 @@
 @model EditProjectTaskViewModel
 
 <!DOCTYPE html>
-
 <html>
 <head>
     <title>Edit ProjectTask</title>
@@ -12,7 +11,7 @@
 <div class="container py-5">
     <h1>Edit @Model.Name</h1>
     <form method="post" asp-controller="ProjectTask" asp-action="Edit" enctype="multipart/form-data">
-        <input type="hidden" asp-for="ProjectId" value="@ViewData["projectId"]" />
+        <input type="hidden" asp-for="ProjectId" value="@ViewData["projectId"]"/>
         <div class="form-group">
             <label asp-for="Name">Name</label>
             <input asp-for="Name" class="form-control" placeholder="Name">
@@ -38,9 +37,28 @@
             </select>
             <span asp-validation-for="Priority" class="text-danger"></span>
         </div>
+        @if (Model.UploadedFiles != null && Model.UploadedFiles.Count > 0)
+        {
+            <div>
+                <h5>Uploaded Files:</h5>
+                <ul>
+                    @foreach (var file in Model.UploadedFiles)
+                    {
+                        <li>
+                            @file.FileName
+                            <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="DeleteFile" asp-route-fileId="@file.Id">Delete</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+        <div class="form-group">
+            <label>Upload New Files:</label>
+            <input asp-for="NewFiles" type="file" multiple class="form-control"/>
+        </div>
         <div class="py-2">
             <div class="form-group">
-                <input class="btn btn-outline-primary" type="submit" value="Edit" />
+                <input class="btn btn-outline-primary" type="submit" value="Edit"/>
                 <a class="btn btn-outline-dark" asp-controller="Project" asp-action="Index">Cancel</a>
             </div>
         </div>

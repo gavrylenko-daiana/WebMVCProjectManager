@@ -1,10 +1,12 @@
+using CloudinaryDotNet.Actions;
 using Core.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Abstractions.Interfaces;
 
 public interface ITaskFileService : IGenericService<TaskFile>
 {
-    Task<TaskFile> AddNewFileAsync(string inputPathFile);
+    Task<UploadResult> AddFileAsync(IFormFile file);
 
-    Task UpdateTaskFile(TaskFile taskFile);
+    Task<DeletionResult> DeleteFileAsync(string url);
 }

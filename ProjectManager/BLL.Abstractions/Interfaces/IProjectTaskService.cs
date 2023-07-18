@@ -8,7 +8,7 @@ public interface IProjectTaskService : IGenericService<ProjectTask>
     // Task<List<ProjectTask>> GetTasksByProject(Project project);
 
     // Task<ProjectTask> GetTaskAfterCreating();
-    Task AddFileToDirectory(string sourceFilePath, ProjectTask projectTask);
+    // Task AddFileToDirectory(string sourceFilePath, ProjectTask projectTask);
     
     Task<List<ProjectTask>> GetTasksByDeveloper(AppUser developer);
 

@@ -37,6 +37,9 @@
                             <div class="mx-2">
                                 <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Detail" asp-route-id="@task.Id">Detail</a>
                             </div>
+                            <div class="mx-2">
+                                <a type="button" class="btn btn-outline-success" asp-controller="ProjectTask" asp-action="UploadFile" asp-route-id="@task.Id" asp-route-projectId="@Model.Id">Upload File</a>
+                            </div>
                         </div>
                     </div>
                 }

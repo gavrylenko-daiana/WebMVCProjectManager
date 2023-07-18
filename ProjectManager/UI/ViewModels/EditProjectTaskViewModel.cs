@@ -24,6 +24,6 @@ public class EditProjectTaskViewModel
     public Priority Priority { get; set; }
     
     public Guid ProjectId { get; set; }
-    
-    public virtual List<TaskFile> UploadedFiles { get; set; } = new List<TaskFile>();
+    public List<TaskFile> UploadedFiles { get; set; } = new List<TaskFile>();
+    public List<IFormFile> NewFiles { get; set; } = new List<IFormFile>();
 }

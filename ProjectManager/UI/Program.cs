@@ -1,5 +1,6 @@
 using BLL.Abstractions.Interfaces;
 using BLL.Services;
+using Core.Helpers;
 using Core.Models;
 using DAL.Abstractions.Interfaces;
 using DAL.Data;
@@ -22,6 +23,7 @@ builder.Services.AddScoped<ITaskFileService, TaskFileService>();
 builder.Services.AddScoped<IUserProjectService, UserProjectService>();
 builder.Services.AddScoped<IUserTaskService, UserTaskService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
     options.UseLazyLoadingProxies()

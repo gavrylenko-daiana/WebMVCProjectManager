@@ -420,6 +420,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         {
             project.Tasks.Remove(task);
             project.Tasks.Add(task);
+            await _projectTaskService.Update(task.Id, task);
             await Update(project.Id, project);
         }
         catch (Exception ex)

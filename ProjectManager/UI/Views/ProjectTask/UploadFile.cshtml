@@ -1,0 +1,32 @@
+@using UI.ViewModels
+@using Core.Enums
+@model UploadFileProjectTaskViewModel
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Create Task</title>
+</head>
+<body>
+<div class="container py-4">
+    <h1>Upload File to Task</h1>
+    <form method="post" asp-action="UploadFile" enctype="multipart/form-data">
+        <input type="hidden" asp-for="ProjectTaskId" />
+        <input type="hidden" asp-for="ProjectId" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="UploadFile" class="control-label"></label>
+            <input asp-for="UploadFile" type="file" class="form-control">
+            <span asp-validation-for="UploadFile" class="text-danger"></span>
+        </div>
+        <div class="py-2">
+            <div class="form-group">
+                <input class="btn btn-outline-primary" type="submit" value="Save"/>
+                <a class="btn btn-outline-dark" asp-controller="Project" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

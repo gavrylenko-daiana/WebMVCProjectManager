@@ -1,42 +1,49 @@
 using BLL.Abstractions.Interfaces;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Core.Helpers;
 using Core.Models;
 using DAL.Abstractions.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace BLL.Services;
 
 public class TaskFileService : GenericService<TaskFile>, ITaskFileService
 {
-    public TaskFileService(IRepository<TaskFile> repository) : base(repository)
+    private readonly Cloudinary _cloudinary;
+
+    public TaskFileService(IRepository<TaskFile> repository, IOptions<CloudinarySettings> config) : base(repository)
     {
+        var acc = new Account(
+            config.Value.CloudName,
+            config.Value.ApiKey,
+            config.Value.ApiSecret
+        );
+        _cloudinary = new Cloudinary(acc);
     }
 
-    public async Task<TaskFile> AddNewFileAsync(string inputPathFile)
+    public async Task<UploadResult> AddFileAsync(IFormFile file)
     {
-        try
+        var uploadResult = new ImageUploadResult();
+
+        if (file.Length > 0)
         {
-            var fileTask = new TaskFile()
+            using var stream = file.OpenReadStream();
+            var uploadParams = new ImageUploadParams
             {
-                UploadedFiles = inputPathFile
+                File = new FileDescription(file.FileName, stream)
             };
-            await Add(fileTask);
+            uploadResult = await _cloudinary.UploadAsync(uploadParams);
+        }
 
-            return fileTask;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        return uploadResult;
     }
 
-    public async Task UpdateTaskFile(TaskFile taskFile)
+    public async Task<DeletionResult> DeleteFileAsync(string publicId)
     {
-        try
-        {
-            await Update(taskFile.Id, taskFile);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        var deleteParams = new DeletionParams(publicId);
+
+        return await _cloudinary.DestroyAsync(deleteParams);
     }
 }

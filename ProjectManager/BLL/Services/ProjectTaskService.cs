@@ -36,56 +36,56 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task AddFileToDirectory(string sourceFilePath, ProjectTask projectTask)
-    {
-        if (projectTask == null) throw new ArgumentNullException(nameof(projectTask));
-        if (string.IsNullOrWhiteSpace(sourceFilePath)) throw new ArgumentNullException(nameof(sourceFilePath));
-
-        try
-        {
-            const string pathToFolder = "DirectoryForUser";
-
-            if (!Directory.Exists(pathToFolder))
-            {
-                Directory.CreateDirectory(pathToFolder);
-            }
-
-            string fileName = Path.GetFileName(sourceFilePath);
-            string destinationFilePath = Path.Combine(pathToFolder, fileName);
-
-            if (File.Exists(destinationFilePath))
-            {
-                int count = 1;
-                string fileNameOnly = Path.GetFileNameWithoutExtension(destinationFilePath);
-                string extension = Path.GetExtension(destinationFilePath);
-                string newFullPath = destinationFilePath;
-
-                while (File.Exists(newFullPath))
-                {
-                    string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
-                    newFullPath = Path.Combine(pathToFolder, tempFileName + extension);
-                }
-
-                File.Copy(sourceFilePath, newFullPath);
-                var taskFile = await _taskFile.AddNewFileAsync(newFullPath);
-                await _taskFile.UpdateTaskFile(taskFile);
-                projectTask.UploadedFiles.Add(taskFile);
-                await Update(projectTask.Id, projectTask);
-            }
-            else
-            {
-                File.Copy(sourceFilePath, destinationFilePath);
-                var taskFile = await _taskFile.AddNewFileAsync(destinationFilePath);
-                await _taskFile.UpdateTaskFile(taskFile);
-                projectTask.UploadedFiles.Add(taskFile);
-                await Update(projectTask.Id, projectTask);
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
-    }
+    // public async Task AddFileToDirectory(string sourceFilePath, ProjectTask projectTask)
+    // {
+    //     if (projectTask == null) throw new ArgumentNullException(nameof(projectTask));
+    //     if (string.IsNullOrWhiteSpace(sourceFilePath)) throw new ArgumentNullException(nameof(sourceFilePath));
+    //
+    //     try
+    //     {
+    //         const string pathToFolder = "DirectoryForUser";
+    //
+    //         if (!Directory.Exists(pathToFolder))
+    //         {
+    //             Directory.CreateDirectory(pathToFolder);
+    //         }
+    //
+    //         string fileName = Path.GetFileName(sourceFilePath);
+    //         string destinationFilePath = Path.Combine(pathToFolder, fileName);
+    //
+    //         if (File.Exists(destinationFilePath))
+    //         {
+    //             int count = 1;
+    //             string fileNameOnly = Path.GetFileNameWithoutExtension(destinationFilePath);
+    //             string extension = Path.GetExtension(destinationFilePath);
+    //             string newFullPath = destinationFilePath;
+    //
+    //             while (File.Exists(newFullPath))
+    //             {
+    //                 string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
+    //                 newFullPath = Path.Combine(pathToFolder, tempFileName + extension);
+    //             }
+    //
+    //             File.Copy(sourceFilePath, newFullPath);
+    //             var taskFile = await _taskFile.AddNewFileAsync(newFullPath);
+    //             await _taskFile.UpdateTaskFile(taskFile);
+    //             projectTask.UploadedFiles.Add(taskFile);
+    //             await Update(projectTask.Id, projectTask);
+    //         }
+    //         else
+    //         {
+    //             File.Copy(sourceFilePath, destinationFilePath);
+    //             var taskFile = await _taskFile.AddNewFileAsync(destinationFilePath);
+    //             await _taskFile.UpdateTaskFile(taskFile);
+    //             projectTask.UploadedFiles.Add(taskFile);
+    //             await Update(projectTask.Id, projectTask);
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         throw new Exception(ex.Message);
+    //     }
+    // }
 
     public async Task<List<ProjectTask>> GetTasksByDeveloper(AppUser developer)
     {
