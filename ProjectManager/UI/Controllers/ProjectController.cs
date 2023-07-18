@@ -3,6 +3,7 @@ using Core.Models;
 using DAL.Abstractions.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Differencing;
 using UI.ViewModels;
 
 namespace UI.Controllers;
@@ -38,6 +39,7 @@ public class ProjectController : Controller
 
         var projectDetail = new Project()
         {
+            Id = project.Id,
             Name = project.Name,
             Description = project.Description,
             CountDoneTasks = project.CountDoneTasks,

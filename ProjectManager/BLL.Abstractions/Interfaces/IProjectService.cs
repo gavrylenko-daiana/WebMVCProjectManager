@@ -40,6 +40,8 @@ public interface IProjectService : IGenericService<Project>
     Task AddTaskToProject(Project project, List<ProjectTask> tasks);
 
     Task DeleteTesterFromProjectsAsync(AppUser tester);
+    
+    Task UpdateOneTaskAsync(ProjectTask task, Project project);
 
     Task UpdateTask(ProjectTask task, List<ProjectTask> modifierTasks, Project project, ProjectTask newTask);
     

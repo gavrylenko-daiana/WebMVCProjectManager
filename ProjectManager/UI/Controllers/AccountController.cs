@@ -83,7 +83,6 @@ public class AccountController : Controller
     //         return View(registerViewModel);
     //     }
     //
-    //     
     //     var authClaim = new List<Claim>
     //     {
     //         new Claim(ClaimTypes.Name, user.UserName)

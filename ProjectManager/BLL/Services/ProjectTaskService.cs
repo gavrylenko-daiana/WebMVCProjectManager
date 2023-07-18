@@ -356,6 +356,30 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
+    public async Task<ProjectTask> CreateTaskWithoutTesterAndStakeHolderTestAsync(ProjectTask projectTask)
+    {
+        if (projectTask == null) throw new ArgumentNullException(nameof(projectTask));
+        
+        try
+        {
+            var task = new ProjectTask
+            {
+                Name = projectTask.Name,
+                Description = projectTask.Description,
+                DueDates = projectTask.DueDates,
+                Priority = projectTask.Priority,
+                ProjectId = projectTask.ProjectId
+            };
+            await Add(task);
+
+            return task;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
     public async Task<ProjectTask> CreateTaskAsync(string taskName, string taskDescription, DateTime term,
         Priority priority, AppUser tester, AppUser stakeHolder, Project project)
     {
@@ -376,8 +400,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
                 Description = taskDescription,
                 DueDates = term,
                 Priority = priority,
-                ProjectId = project.Id,
-                Project = project
+                ProjectId = project.Id
             };
             await Add(task);
             await _userTask.AddUserTask(stakeHolder, task);

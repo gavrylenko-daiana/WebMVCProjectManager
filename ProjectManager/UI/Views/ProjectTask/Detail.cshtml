@@ -1,5 +1,5 @@
 @using Core.Models
-@model Project
+@model ProjectTask
 
 <!DOCTYPE html>
 
@@ -13,38 +13,19 @@
         <div class="list-group-item list-group-item-action my-2">
             <div class="d-flex w-100 justify-content-between">
                 <h3 class="mb-1">@Model.Name</h3>
-                @* <h3 class="mb-1">@Model.Id</h3> *@
                 <small>@Model.DueDates.ToString("d")</small>
             </div>
             <p class="mb-1">@Model.Description</p>
-            <p class="mb-1">Count of done tasks: @Model.CountDoneTasks / @Model.Tasks.Count</p>
+            <p class="mb-1">Priority: @Model.Priority</p>
             <div class="d-flex w-100 justify-content-between">
                 <p class="mb-1">Progress: @Model.Progress</p>
             </div>
-            @if (Model.Tasks.Any())
-            {
-                @foreach (var task in Model.Tasks)
-                {
-                    <div class="d-flex justify-content-between align-items-end my-2">
-                        <small>Task: <br> @task.Name</small>
-                        <div class="d-flex ml-auto">
-                            @* <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Delete" asp-route-id="@project.Id">Delete</a> *@
-                            <div class="mx-2">
-                                <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Edit" asp-route-id="@task.Id" asp-route-projectId="@Model.Id">Edit</a>
-                            </div>
-                            <div class="mx-2">
-                                <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Detail" asp-route-id="@task.Id">Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            @if (Model.UserProjects.Any())
+            @if (Model.AssignedUsers.Any())
             {
                 <div class="my-2">
-                    <h6 class="mb-1">Project Users:</h6>
+                    <h6 class="mb-1">Task Users:</h6>
                     <ul class="list-group">
-                        @foreach (var userProject in Model.UserProjects)
+                        @foreach (var userProject in Model.AssignedUsers)
                         {
                             <li class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">

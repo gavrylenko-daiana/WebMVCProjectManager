@@ -1,0 +1,39 @@
+@using Core.Models
+@model IEnumerable<ProjectTask>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Projects</title>
+</head>
+<body>
+<div class="container py-4">
+    <div class="list-group">
+        @foreach (var task in Model)
+        {
+            <div class="list-group-item list-group-item-action my-2">
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                    <h5 class="mb-0">@task.Name</h5>
+                    <small class="mr-2">@task.DueDates.ToString("d")</small>
+                    <small class="mr-2">@task.Priority</small>
+                    <div class="d-flex">
+                        @* <div class="mx-2"> *@
+                        @*     <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Create" asp-route-id="@project.Id">Create Task</a> *@
+                        @* </div> *@
+                        @* <div class="mx-2"> *@
+                        @*     <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id">Delete</a> *@
+                        @* </div> *@
+                        @* <div class="mx-2"> *@
+                        @*     <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Edit" asp-route-id="@project.Id">Edit</a> *@
+                        @* </div> *@
+                        <div class="mx-2">
+                            <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Detail" asp-route-id="@task.Id">Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+</body>
+</html>

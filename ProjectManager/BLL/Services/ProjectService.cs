@@ -39,7 +39,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task<Project> GetProjectByName(string projectName)
     {
         if (string.IsNullOrWhiteSpace(projectName)) throw new ArgumentNullException(nameof(projectName));
-        
+
         try
         {
             var project = await GetByPredicate(p => p.Name == projectName);
@@ -61,7 +61,8 @@ public class ProjectService : GenericService<Project>, IProjectService
         try
         {
             var projects = (await GetAll())
-                .Where(p => p.UserProjects.Any(up => up.User.Role == UserRole.StakeHolder && up.UserId == stakeHolder.Id))
+                .Where(p => p.UserProjects.Any(
+                    up => up.User.Role == UserRole.StakeHolder && up.UserId == stakeHolder.Id))
                 .ToList();
 
             return projects;
@@ -75,7 +76,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     private async Task<List<Project>> GetProjectByTester(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
-        
+
         try
         {
             var projects = (await GetAll())
@@ -89,11 +90,11 @@ public class ProjectService : GenericService<Project>, IProjectService
             throw new Exception(ex.Message);
         }
     }
-    
+
     public async Task<Project> GetProjectByTask(ProjectTask task)
     {
         if (task == null) throw new ArgumentNullException(nameof(task));
-        
+
         try
         {
             var projects = await GetAll();
@@ -110,7 +111,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task UpdateProject(Project project)
     {
         if (project == null) throw new ArgumentNullException(nameof(project));
-        
+
         try
         {
             var tasks = (await _projectTaskService.GetAll()).Where(t => project.Tasks.Any(p => p.Id == t.Id)).ToList();
@@ -126,7 +127,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task<List<ProjectTask>> GetCompletedTask(Project project)
     {
         if (project == null) throw new ArgumentNullException(nameof(project));
-        
+
         try
         {
             var tasks = project.Tasks.Where(t => t.Progress == Progress.CompletedTask).ToList();
@@ -142,7 +143,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task UpdateToCompletedProject(Project project)
     {
         if (project == null) throw new ArgumentNullException(nameof(project));
-        
+
         try
         {
             project.Progress = Progress.CompletedProject;
@@ -158,7 +159,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task UpdateToWaitingTask(Project project)
     {
         if (project == null) throw new ArgumentNullException(nameof(project));
-        
+
         try
         {
             for (int i = 0; i < project.Tasks.Count; i++)
@@ -180,7 +181,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     {
         if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException(nameof(email));
         if (string.IsNullOrWhiteSpace(messageEmail)) throw new ArgumentNullException(nameof(messageEmail));
-        
+
         try
         {
             await _userService.SendMessageEmailUserAsync(email, messageEmail);
@@ -211,7 +212,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     {
         if (task == null) throw new ArgumentNullException(nameof(task));
         if (date == null) throw new ArgumentNullException(nameof(date));
-        
+
         try
         {
             await _projectTaskService.UpdateDueDateInTaskAsync(task, date);
@@ -225,7 +226,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task DeleteProject(string projectName)
     {
         if (string.IsNullOrWhiteSpace(projectName)) throw new ArgumentNullException(nameof(projectName));
-       
+
         try
         {
             var project = await GetProjectByName(projectName);
@@ -241,7 +242,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     private async Task DeleteTasksWithProjectAsync(Project project)
     {
         if (project == null) throw new ArgumentNullException(nameof(project));
-        
+
         try
         {
             await _projectTaskService.DeleteTasksWithProject(project);
@@ -256,7 +257,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     {
         if (project == null) throw new ArgumentNullException(nameof(project));
         if (task == null) throw new ArgumentNullException(nameof(task));
-        
+
         try
         {
             project.Tasks.RemoveAll(x => x.Id == task.Id);
@@ -272,7 +273,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task DeleteProjectsWithSteakHolderAsync(AppUser stakeHolder)
     {
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
-        
+
         try
         {
             var projects = await GetProjectsByStakeHolder(stakeHolder);
@@ -292,7 +293,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task DeleteCurrentTaskAsync(ProjectTask task)
     {
         if (task == null) throw new ArgumentNullException(nameof(task));
-        
+
         try
         {
             var project = await GetProjectByTask(task);
@@ -311,7 +312,7 @@ public class ProjectService : GenericService<Project>, IProjectService
             throw new Exception(ex.Message);
         }
     }
-    
+
     public async Task CreateProjectTestWithoutStakeHolderAsync(Project projectVM)
     {
         if (projectVM == null) throw new ArgumentNullException(nameof(projectVM));
@@ -325,7 +326,7 @@ public class ProjectService : GenericService<Project>, IProjectService
                 DueDates = projectVM.DueDates,
                 Progress = Progress.Planned
             };
-            
+
             await Add(project);
             // await _userProjectService.AddUserProject(stakeHolder, project);
         }
@@ -342,7 +343,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         if (string.IsNullOrWhiteSpace(projectName)) throw new ArgumentNullException(nameof(projectName));
         if (string.IsNullOrWhiteSpace(projectDescription)) throw new ArgumentNullException(nameof(projectDescription));
         if (enteredDate == default(DateTime)) throw new ArgumentException("date cannot be empty");
-        
+
         try
         {
             var project = new Project
@@ -352,7 +353,7 @@ public class ProjectService : GenericService<Project>, IProjectService
                 DueDates = enteredDate,
                 Progress = Progress.Planned
             };
-            
+
             await Add(project);
             await _userProjectService.AddUserProject(stakeHolder, project);
         }
@@ -366,13 +367,14 @@ public class ProjectService : GenericService<Project>, IProjectService
     {
         if (project == null) throw new ArgumentNullException(nameof(project));
         if (tasks == null) throw new ArgumentNullException(nameof(tasks));
-        
+
         try
         {
             if (project.Tasks.Count == 0)
             {
                 project.Progress = Progress.InProgress;
             }
+
             project.Tasks.AddRange(tasks);
             await Update(project.Id, project);
         }
@@ -385,7 +387,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task DeleteTesterFromProjectsAsync(AppUser tester)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
-        
+
         try
         {
             var projects = await GetProjectByTester(tester);
@@ -408,7 +410,25 @@ public class ProjectService : GenericService<Project>, IProjectService
             throw new Exception(ex.Message);
         }
     }
-    
+
+    public async Task UpdateOneTaskAsync(ProjectTask task, Project project)
+    {
+        if (task == null) throw new ArgumentNullException(nameof(task));
+        if (project == null) throw new ArgumentNullException(nameof(project));
+
+        try
+        {
+            project.Tasks.Remove(task);
+            project.Tasks.Add(task);
+            await Update(project.Id, project);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
+
     public async Task UpdateTask(ProjectTask task, List<ProjectTask> modifierTasks, Project project,
         ProjectTask newTask)
     {
@@ -416,7 +436,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         if (modifierTasks == null) throw new ArgumentNullException(nameof(modifierTasks));
         if (project == null) throw new ArgumentNullException(nameof(project));
         if (newTask == null) throw new ArgumentNullException(nameof(newTask));
-        
+
         try
         {
             if (newTask != null)
@@ -433,13 +453,13 @@ public class ProjectService : GenericService<Project>, IProjectService
             throw new Exception(ex.Message);
         }
     }
-    
+
     public Task<AppUser> GetStakeHolderByProject(Project project)
     {
         try
         {
             var stakeHolder = project.UserProjects.FirstOrDefault(up => up.User.Role == UserRole.StakeHolder)?.User;
-            
+
             return Task.FromResult(stakeHolder);
         }
         catch (Exception ex)
@@ -453,7 +473,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         try
         {
             var tester = project.UserProjects.FirstOrDefault(up => up.User.Role == UserRole.Tester)?.User;
-            
+
             return Task.FromResult(tester);
         }
         catch (Exception ex)

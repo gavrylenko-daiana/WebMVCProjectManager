@@ -37,6 +37,8 @@ public interface IProjectTaskService : IGenericService<ProjectTask>
     Task DeleteDeveloperFromTasksAsync(List<ProjectTask> tasks);
 
     Task<DateTime> CreateDueDateForTask(Project project, string[] date);
+    
+    Task<ProjectTask> CreateTaskWithoutTesterAndStakeHolderTestAsync(ProjectTask projectTask);
 
     Task<ProjectTask> CreateTaskAsync(string taskName, string taskDescription, DateTime term,
         Priority priority, AppUser tester, AppUser stakeHolder, Project project);
