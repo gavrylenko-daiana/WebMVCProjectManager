@@ -1,6 +1,6 @@
 @using UI.ViewModels
 @using Core.Enums
-@model UploadFileProjectTaskViewModel
+@model CreateFileProjectTaskViewModel
 
 <!DOCTYPE html>
 
@@ -11,7 +11,7 @@
 <body>
 <div class="container py-4">
     <h1>Upload File to Task</h1>
-    <form method="post" asp-action="UploadFile" enctype="multipart/form-data">
+    <form method="post" asp-action="Create" enctype="multipart/form-data">
         <input type="hidden" asp-for="ProjectTaskId" />
         <input type="hidden" asp-for="ProjectId" />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>

@@ -64,4 +64,16 @@ app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
 
+// app.UseEndpoints(endpoints =>
+// {
+//     endpoints.MapControllerRoute(
+//         name: "default",
+//         pattern: "{controller}/{action}/{id?}",
+//         defaults: new { controller = "User", action = "Index" });
+//
+//     endpoints.MapControllerRoute(
+//         name: "unauthenticated",
+//         pattern: "{controller=Account}/{action=Register}/{id?}");
+// });
+
 app.Run();

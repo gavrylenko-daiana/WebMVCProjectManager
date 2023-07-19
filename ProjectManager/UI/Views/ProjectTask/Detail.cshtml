@@ -41,6 +41,36 @@
                     </ul>
                 </div>
             }
+            @if (Model.UploadedFiles != null && Model.UploadedFiles.Count > 0)
+            {
+                <div>
+                    <h5>Uploaded Files:</h5>
+                    <div class="row">
+                        @foreach (var file in Model.UploadedFiles)
+                        {
+                            <div class="col-md-3 mb-3">
+                                <div class="card">
+                                    <img alt="Image" src="@file.FilePath" class="card-img-top img-fluid" style="max-height: 200px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title">@file.FileName</h6>
+                                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#imageModal_@file.Id">View</button>
+                                        <a class="btn btn-outline-danger btn-sm" asp-controller="UploadFile" asp-action="Delete" asp-route-id="@file.Id">Delete</a>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="imageModal_@file.Id" tabindex="-1" aria-labelledby="imageModalLabel_@file.Id" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <img alt="Image" src="@file.FilePath" class="img-fluid" style="max-height: 500px; object-fit: contain;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

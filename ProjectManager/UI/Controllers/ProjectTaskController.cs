@@ -5,6 +5,7 @@ using Core.Enums;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UI.ViewModels;
 
 namespace UI.Controllers;
@@ -14,15 +15,13 @@ public class ProjectTaskController : Controller
     private readonly IProjectTaskService _projectTaskService;
     private readonly UserManager<AppUser> _userManager;
     private readonly IProjectService _projectService;
-    private readonly IUploadedFileService _uploadedFileService;
 
     public ProjectTaskController(IProjectTaskService projectTaskService, UserManager<AppUser> userManager,
-        IProjectService projectService, IUploadedFileService uploadedFileService)
+        IProjectService projectService)
     {
         _projectTaskService = projectTaskService;
         _userManager = userManager;
         _projectService = projectService;
-        _uploadedFileService = uploadedFileService;
     }
 
     [HttpGet]
@@ -69,26 +68,24 @@ public class ProjectTaskController : Controller
         ViewData["DueDates"] = project.DueDates;
         ViewData["projectId"] = projectId;
 
+        var users = await _userManager.Users.Where(u => u.Role == UserRole.Tester).ToListAsync();
+
+        ViewData["AllTester"] = users;
+
         return View();
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> Create(Guid projectId, CreateProjectTaskViewModel createProjectTaskViewModel)
     {
         if (!ModelState.IsValid)
         {
             TempData["Error"] = "Entered incorrect data. Please try again.";
-            var users = _userManager.Users.Where(u => u.Role == UserRole.Tester).ToList();
-
-            ViewData["AllTester"] = users;
-            
             return View(createProjectTaskViewModel);
         }
 
         if (!await _projectTaskService.ProjectTaskIsAlreadyExist(createProjectTaskViewModel.Name))
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-            
             var projectTask = new ProjectTask()
             {
                 Name = createProjectTaskViewModel.Name,
@@ -97,9 +94,12 @@ public class ProjectTaskController : Controller
                 Priority = createProjectTaskViewModel.Priority,
                 ProjectId = projectId
             };
-
-            await _projectTaskService.CreateTaskWithoutTesterAndStakeHolderTestAsync(projectTask);
-            // await _projectTaskService.CreateTaskAsync(projectTask);
+            var testerId = createProjectTaskViewModel.TesterId;
+            var tester = await _userManager.FindByIdAsync(testerId);
+            var project = await _projectService.GetById(projectId);
+            var currentUser = await _userManager.GetUserAsync(User);
+            
+            await _projectTaskService.CreateTaskAsync(projectTask, tester, currentUser, project);
 
             return RedirectToAction("Index", "ProjectTask");
         }
@@ -189,73 +189,4 @@ public class ProjectTaskController : Controller
 
         return RedirectToAction("Index", "ProjectTask");
     }
-
-    [HttpGet]
-    public IActionResult UploadFile(Guid id, Guid projectId)
-    {
-        var viewModel = new UploadFileProjectTaskViewModel
-        {
-            ProjectTaskId = id,
-            ProjectId = projectId
-        };
-        return View(viewModel);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> UploadFile(Guid id, UploadFileProjectTaskViewModel viewModel)
-    {
-        if (!ModelState.IsValid) return View(viewModel);
-
-        var projectTask = await _projectTaskService.GetById(id);
-        
-        if (projectTask == null) return View("Error");
-
-        var project = await _projectService.GetById(viewModel.ProjectId);
-        
-        if (project == null) return View("Error");
-
-        var uploadResult = await _uploadedFileService.AddFileAsync(viewModel.UploadFile);
-
-        var taskFile = new UploadedFile()
-        {
-            FileName = viewModel.UploadFile.FileName,
-            FilePath = uploadResult.Url.ToString(),
-            ProjectTaskId = projectTask.Id,
-            ProjectTask = projectTask
-        };
-
-        projectTask.UploadedFiles.Add(taskFile);
-
-        try
-        {
-            await _projectService.UpdateOneTaskAsync(projectTask, project);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
-
-        return RedirectToAction("Detail");
-    }
-
-
-    // [HttpPost]
-    // public async Task<IActionResult> DeleteFile(Guid id, Guid fileId)
-    // {
-    //     var projectTask = await _projectTaskService.GetById(id);
-    //     
-    //     if (projectTask == null) return NotFound();
-    //
-    //     var fileToDelete = projectTask.UploadedFiles.FirstOrDefault(f => f.Id == fileId);
-    //     
-    //     if (fileToDelete == null) return NotFound();
-    //
-    //     await _taskFileService.DeleteFileAsync(fileToDelete.FilePath);
-    //
-    //     projectTask.UploadedFiles.Remove(fileToDelete);
-    //
-    //     await _projectTaskService.Update(projectTask.Id, projectTask);
-    //
-    //     return RedirectToAction("Edit");
-    // }
 }

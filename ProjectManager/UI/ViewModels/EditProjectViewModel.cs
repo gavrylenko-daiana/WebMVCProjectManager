@@ -13,6 +13,7 @@ public class EditProjectViewModel
     public string Description { get; set; } = null!;
     
     [Required(ErrorMessage = "Deadline is required")]
-    [Display(Name = "Deadline:")]
+    [Display(Name = "Deadline")]
+    [DataType(DataType.Date)]
     public DateTime DueDates { get; set; }
 }

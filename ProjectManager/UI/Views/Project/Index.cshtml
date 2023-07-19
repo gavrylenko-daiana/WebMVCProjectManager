@@ -26,15 +26,19 @@
                     <div class="d-flex">
                         @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.StakeHolder.ToString()))
                         {
-                            <div class="mx-2">
-                                <a type="button" class="btn btn-outline-danger" asp-controller="ProjectTask" asp-action="Create" asp-route-projectId="@project.Id">Create Task</a>
-                            </div>
-                            <div class="mx-2">
-                                <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id">Delete</a>
-                            </div>
-                            <div class="mx-2">
-                                <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Edit" asp-route-id="@project.Id">Edit</a>
-                            </div>
+                            var projectSh = project.UserProjects.Where(p => p.User.UserName == User.Identity.Name).ToList();
+                            @if (projectSh.Any(p => p.ProjectId == project.Id))
+                            {
+                                <div class="mx-2">
+                                    <a type="button" class="btn btn-outline-danger" asp-controller="ProjectTask" asp-action="Create" asp-route-projectId="@project.Id">Create Task</a>
+                                </div>
+                                <div class="mx-2">
+                                    <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Delete" asp-route-id="@project.Id">Delete</a>
+                                </div>
+                                <div class="mx-2">
+                                    <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Edit" asp-route-id="@project.Id">Edit</a>
+                                </div>
+                            }
                         }
                         <div class="mx-2">
                             <a type="button" class="btn btn-outline-primary" asp-controller="Project" asp-action="Detail" asp-route-id="@project.Id">Detail</a>

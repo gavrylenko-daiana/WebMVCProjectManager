@@ -35,20 +35,23 @@
         <div class="form-group">
             <label asp-for="Priority" class="control-label">Priority:</label>
             <select asp-for="Priority" class="form-control">
-                @foreach (var priorityValue in Enum.GetValues(typeof(Priority)))
+                @foreach (var priority in Enum.GetValues(typeof(Priority)))
                 {
-                    <option value="@priorityValue">@priorityValue</option>
+                    <option value="@priority">@priority</option>
                 }
             </select>
             <span asp-validation-for="Priority" class="text-danger"></span>
         </div>
-        @if (ViewData["AllTester"] != null)
-        {
-            foreach (AppUser tester in (IEnumerable)ViewData["AllTester"])
-            {
-                // потом View User Detail с route tester.Id
-            }
-        }
+        <div class="form-group">
+            <label asp-for="TesterId" class="control-label">Tester:</label>
+            <select asp-for="TesterId" class="form-control">
+                @foreach (var tester in (IEnumerable<AppUser>)ViewData["AllTester"])
+                {
+                    <option value="@tester.Id">@tester.UserName</option>
+                }
+            </select>
+            <span asp-validation-for="TesterId" class="text-danger"></span>
+        </div>
         <div class="py-2">
             <div class="form-group">
                 <input class="btn btn-outline-primary" type="submit" value="Create"/>

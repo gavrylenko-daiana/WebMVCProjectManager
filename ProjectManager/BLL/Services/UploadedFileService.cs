@@ -9,11 +9,11 @@ using Microsoft.Extensions.Options;
 
 namespace BLL.Services;
 
-public class UploadedFileService : GenericService<UploadedFile>, IUploadedFileService
+public class UploadedFileService : GenericService<TaskFile>, IUploadedFileService
 {
     private readonly Cloudinary _cloudinary;
 
-    public UploadedFileService(IRepository<UploadedFile> repository, IOptions<CloudinarySettings> config) : base(repository)
+    public UploadedFileService(IRepository<TaskFile> repository, IOptions<CloudinarySettings> config) : base(repository)
     {
         var acc = new Account(
             config.Value.CloudName,
@@ -47,8 +47,20 @@ public class UploadedFileService : GenericService<UploadedFile>, IUploadedFileSe
         return await _cloudinary.DestroyAsync(deleteParams);
     }
 
-    public async Task AddUploadFileAsync(UploadedFile uploadedFile)
+    public async Task AddUploadFileAsync(TaskFile uploadedFile)
     {
         await Add(uploadedFile);
+    }
+    
+    public async Task DeleteUploadFileAsync(Guid id)
+    {
+        await Delete(id);
+    }
+    
+    public async Task<TaskFile> GetByIdUploadFileAsync(Guid id)
+    {
+        var file = await GetById(id);
+
+        return file;
     }
 }

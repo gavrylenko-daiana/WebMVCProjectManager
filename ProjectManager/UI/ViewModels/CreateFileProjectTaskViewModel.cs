@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UI.ViewModels;
 
-public class UploadFileProjectTaskViewModel
+public class CreateFileProjectTaskViewModel
 {
     public Guid ProjectTaskId { get; set; }
     public Guid ProjectId { get; set; }

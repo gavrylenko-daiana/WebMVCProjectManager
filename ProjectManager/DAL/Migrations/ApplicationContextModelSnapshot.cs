@@ -151,7 +151,7 @@ namespace DAL.Migrations
                     b.ToTable("ProjectTasks");
                 });
 
-            modelBuilder.Entity("Core.Models.UploadedFile", b =>
+            modelBuilder.Entity("Core.Models.TaskFile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -165,17 +165,14 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("ProjectTaskId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("ProjectTaskId");
 
-                    b.ToTable("UploadedFiles");
+                    b.ToTable("TaskFiles");
                 });
 
             modelBuilder.Entity("Core.Models.UserProject", b =>
@@ -364,11 +361,11 @@ namespace DAL.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("Core.Models.UploadedFile", b =>
+            modelBuilder.Entity("Core.Models.TaskFile", b =>
                 {
                     b.HasOne("Core.Models.ProjectTask", "ProjectTask")
                         .WithMany("UploadedFiles")
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("ProjectTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

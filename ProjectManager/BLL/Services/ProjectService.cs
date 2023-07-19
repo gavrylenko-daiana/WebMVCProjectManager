@@ -339,7 +339,8 @@ public class ProjectService : GenericService<Project>, IProjectService
     public async Task CreateProject(AppUser stakeHolder, Project projectVM)
     {
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
-        
+        if (projectVM == null) throw new ArgumentNullException(nameof(projectVM));
+
         try
         {
             var project = new Project

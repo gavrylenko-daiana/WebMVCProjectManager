@@ -13,5 +13,9 @@ public interface IUploadedFileService
 
     Task<DeletionResult> DeleteFileAsync(string publicId);
 
-    Task AddUploadFileAsync(UploadedFile uploadedFile);
+    Task AddUploadFileAsync(TaskFile uploadedFile);
+
+    Task DeleteUploadFileAsync(Guid id);
+
+    Task<TaskFile> GetByIdUploadFileAsync(Guid id);
 }

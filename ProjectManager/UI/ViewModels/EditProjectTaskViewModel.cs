@@ -20,9 +20,8 @@ public class EditProjectTaskViewModel
     
     [Required(ErrorMessage = "Priority is required")]
     [Display(Name = "Priority")]
-    
     public Priority Priority { get; set; }
     
     public Guid ProjectId { get; set; }
-    public List<UploadedFile> UploadedFiles { get; set; } = new List<UploadedFile>();
+    public List<TaskFile> UploadedFiles { get; set; } = new List<TaskFile>();
 }

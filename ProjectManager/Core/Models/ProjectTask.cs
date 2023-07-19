@@ -16,5 +16,5 @@ public class ProjectTask : BaseEntity
     
     [ForeignKey("ProjectId")]
     public virtual Project Project { get; set; }
-    public virtual List<UploadedFile> UploadedFiles { get; set; } = new List<UploadedFile>();
+    public virtual List<TaskFile> UploadedFiles { get; set; } = new List<TaskFile>();
 }

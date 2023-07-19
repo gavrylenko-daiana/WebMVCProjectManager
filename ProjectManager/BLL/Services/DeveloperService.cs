@@ -145,6 +145,7 @@ public class DeveloperService : GenericService<AppUser>, IDeveloperService
                 { UserId = developer.Id, User = developer, ProjectTaskId = task.Id, ProjectTask = task };
             await _userTask.Add(userTaskDeveloper);
             task.Progress = Progress.InProgress;
+            project.Progress = Progress.InProgress;
 
             if (!await _userProjectService.IsUserInProject(developer.Id, project.Id))
             {

@@ -24,5 +24,9 @@ public class CreateProjectTaskViewModel
     [Display(Name = "Priority")]
     public Priority Priority { get; set; }
     
+    [Required(ErrorMessage = "Tester is required")]
+    [Display(Name = "Tester")]
+    public string? TesterId { get; set; }
     public Guid ProjectId { get; set; }
+    
 }

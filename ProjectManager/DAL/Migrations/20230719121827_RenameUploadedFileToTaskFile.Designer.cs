@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230718133629_EditTaskFile")]
-    partial class EditTaskFile
+    [Migration("20230719121827_RenameUploadedFileToTaskFile")]
+    partial class RenameUploadedFileToTaskFile
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,7 +168,7 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ProjectTaskId")
+                    b.Property<Guid>("ProjectTaskId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -366,9 +366,13 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Core.Models.TaskFile", b =>
                 {
-                    b.HasOne("Core.Models.ProjectTask", null)
+                    b.HasOne("Core.Models.ProjectTask", "ProjectTask")
                         .WithMany("UploadedFiles")
-                        .HasForeignKey("ProjectTaskId");
+                        .HasForeignKey("ProjectTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProjectTask");
                 });
 
             modelBuilder.Entity("Core.Models.UserProject", b =>

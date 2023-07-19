@@ -1,0 +1,65 @@
+@using UI.ViewModels
+@model UserViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>User Profile</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-group py-2">
+                        <label asp-for="Username" class="control-label"></label>
+                        <input asp-for="Username" class="form-control" id="Username" value="@Model.Username" readonly>
+                    </div>
+                    <div class="form-group py-2">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" id="Email" value="@Model.Email" readonly>
+                    </div>
+                    <div class="form-group py-2">
+                        <label asp-for="Role" class="control-label"></label>
+                        <input asp-for="Role" class="form-control" id="Role" value="@Model.Role.ToString()" readonly>
+                    </div>
+                    @if (@Model.UserProjects.Any())
+                    {
+                        <div class="form-group py-2">
+
+                            <label asp-for="UserProjects" class="control-label"></label>
+                            <ul class="list-group">
+                                @foreach (var project in Model.UserProjects)
+                                {
+                                    <li class="list-group-item">@project.Project.Name</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    @if (@Model.AssignedTasks.Any())
+                    {
+                        <div class="form-group py-2">
+                            <label asp-for="AssignedTasks" class="control-label"></label>
+                            <ul class="list-group">
+                                @foreach (var task in Model.AssignedTasks)
+                                {
+                                    <li class="list-group-item">@task.ProjectTask.Name</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

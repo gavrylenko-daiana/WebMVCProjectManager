@@ -97,31 +97,22 @@ public class AccountController : Controller
         var newUserResponse = await _userManager.CreateAsync(newUser, registerViewModel.Password);
 
         if (!await _roleManager.RoleExistsAsync(UserRole.StakeHolder.ToString()))
-        {
             await _roleManager.CreateAsync(new IdentityRole(UserRole.StakeHolder.ToString()));
-        }
 
         if (!await _roleManager.RoleExistsAsync(UserRole.Tester.ToString()))
-        {
             await _roleManager.CreateAsync(new IdentityRole(UserRole.Tester.ToString()));
-        }
-
+        
         if (!await _roleManager.RoleExistsAsync(UserRole.Developer.ToString()))
-        {
             await _roleManager.CreateAsync(new IdentityRole(UserRole.Developer.ToString()));
-        }
 
         if (newUserResponse.Succeeded)
         {
             var roleResult = await _userManager.AddToRoleAsync(newUser, registerViewModel.Role.ToString());
 
-            if (!roleResult.Succeeded)
-            {
-                return View("Error");
-            }
+            if (!roleResult.Succeeded) return View("Error");
         }
 
-        return RedirectToAction("Index", "Project");
+        return RedirectToAction("Login", "Account");
     }
 
     [HttpGet]

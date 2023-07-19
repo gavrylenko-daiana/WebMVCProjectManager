@@ -14,14 +14,22 @@ a {
 
 body {
     font-family: 'Work Sans', sans-serif;
+    background-color: #b6effb;
 }
 
-header {
+header, .card-body {
     background-color: #9ce1ef;
 }
 
-body {
-    background-color: #b6effb;
+.card-header {
+    background-color: #4bd3ef;
+}
+
+.container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 260px;
 }
 
 html {

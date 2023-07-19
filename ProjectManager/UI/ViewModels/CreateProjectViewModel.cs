@@ -18,8 +18,4 @@ public class CreateProjectViewModel
     [Display(Name = "Deadline")]
     [DataType(DataType.Date)]
     public DateTime DueDates { get; set; }
-    
-    public AppUser StakeHolder { get; set; }
-    
-    public string StakeHolderId { get; set; }
 }
