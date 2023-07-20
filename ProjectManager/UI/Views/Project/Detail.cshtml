@@ -41,6 +41,9 @@
                                     <div class="mx-2">
                                         <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Edit" asp-route-id="@task.Id" asp-route-projectId="@Model.Id">Edit</a>
                                     </div>
+                                    <div class="mx-2">
+                                        <a type="button" class="btn btn-outline-success" asp-controller="UploadFile" asp-action="Create" asp-route-id="@task.Id" asp-route-projectId="@Model.Id">Upload File</a>
+                                    </div>
                                 }
                             }
                             @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.Developer.ToString()) && task.Progress == Progress.Planned)

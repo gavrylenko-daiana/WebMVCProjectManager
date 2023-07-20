@@ -160,6 +160,23 @@ public abstract class GenericService<T> : IGenericService<T>
             throw new Exception($"Failed to update {typeof(T).Name} with Id {id}. Exception: {ex.Message}");
         }
     }
+    
+    public virtual async Task UpdateIdentity(string id, T obj)
+    {
+        try
+        {
+            var result = await _repository.UpdateIdentityAsync(id, obj);
+
+            if (!result.IsSuccessful)
+            {
+                throw new Exception($"Failed to update {typeof(T).Name} with Id {id}.");
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Failed to update {typeof(T).Name} with Id {id}. Exception: {ex.Message}");
+        }
+    }
 
     public async Task<string> GetStringWithoutSpace(string input)
     {

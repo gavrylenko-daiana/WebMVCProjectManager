@@ -15,16 +15,12 @@
 <div class="container">
     <div class="py-4">
         <div class="col-md-6">
-            <p>
-                <h1>Login</h1>
-            </p>
-            @if (TempData["Error"] != null)
-            {
-                <div class="col-md-12 alert alert-danger">
-                    <span><b>Sorry!</b> - @TempData["Error"]</span>
-                </div>
-            }
+            <h1>@ViewData["Title"]</h1>
             <div class="py-2">
+                @* @if (TempData[SuccessMessage] != null) *@
+                @* { *@
+                @*     <p class="text-success">@TempData.SuccessMessage</p> *@
+                @* } *@
                 <form asp-action="Login">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
@@ -41,6 +37,7 @@
                         <div class="form-group">
                             <input class="btn btn-outline-primary" type="submit" value="Login"/>
                             <a class="btn btn-outline-dark" asp-controller="Account" asp-action="Register">Register</a>
+                            <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ForgotPassword">Forgot password</a>
                         </div>
                     </div>
                 </form>

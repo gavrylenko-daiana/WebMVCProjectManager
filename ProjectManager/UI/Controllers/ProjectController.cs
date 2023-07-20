@@ -33,7 +33,7 @@ public class ProjectController : Controller
 
         if (project == null)
         {
-            TempData["Error"] = "Entered incorrect username or email. Please try again.";
+            TempData["Error"] = "Entered incorrect data. Please try again.";
             return RedirectToAction("Index", "Project");
         }
 

@@ -14,40 +14,52 @@
         @foreach (var task in Model)
         {
             <div class="list-group-item list-group-item-action my-2">
-                <div class="d-flex w-100 justify-content-between align-items-center">
-                    <h5 class="mb-0">@task.Name</h5>
-                    <small class="mr-2">@task.DueDates.ToString("d")</small>
-                    <small class="mr-2">@task.Priority</small>
-                    <div class="d-flex">
-                        @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.StakeHolder.ToString()))
-                        {
-                            var taskSh = task.AssignedUsers.Where(p => p.User.UserName == User.Identity.Name).ToList();
-                            @if (taskSh.Any(p => p.ProjectTaskId == task.Id))
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <h5 class="mb-0">@task.Name</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <small>@task.Priority</small>
+                    </div>
+                    <div class="col-md-3">
+                        <small>@task.DueDates.ToString("d")</small>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-end" style="white-space: nowrap;">
+                            @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.StakeHolder.ToString()))
+                            {
+                                var taskSh = task.AssignedUsers.Where(p => p.User.UserName == User.Identity.Name).ToList();
+                                @if (taskSh.Any(p => p.ProjectTaskId == task.Id))
+                                {
+                                    <div class="mx-2">
+                                        <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Delete" asp-route-id="@task.Id">Delete</a>
+                                    </div>
+                                    <div class="mx-2">
+                                        <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Edit" asp-route-id="@task.Id" asp-route-projectId="@task.ProjectId">Edit</a>
+                                    </div>
+                                    <div class="mx-2">
+                                        <a type="button" class="btn btn-outline-success" asp-controller="UploadFile" asp-action="Create" asp-route-id="@task.Id" asp-route-projectId="@task.ProjectId">Upload File</a>
+                                    </div>
+                                }
+                            }
+                            @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.Developer.ToString()) && task.Progress == Progress.Planned)
                             {
                                 <div class="mx-2">
-                                    <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Delete" asp-route-id="@task.Id">Delete</a>
+                                    <a type="button" class="btn btn-outline-danger" asp-controller="Developer" asp-action="TakeTaskByDeveloper" asp-route-id="@task.Id">Take Task</a>
                                 </div>
                                 <div class="mx-2">
-                                    <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Edit" asp-route-id="@task.Id" asp-route-projectId="@task.ProjectId">Edit</a>
+                                    <a type="button" class="btn btn-outline-success" asp-controller="UploadFile" asp-action="Create" asp-route-id="@task.Id" asp-route-projectId="@task.ProjectId">Upload File</a>
                                 </div>
                             }
-                        }
-                        @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.Developer.ToString()) && task.Progress == Progress.Planned)
-                        {
                             <div class="mx-2">
-                                <a type="button" class="btn btn-outline-danger" asp-controller="Developer" asp-action="TakeTaskByDeveloper" asp-route-id="@task.Id">Take Task</a>
+                                <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Detail" asp-route-id="@task.Id">Detail</a>
                             </div>
-                            <div class="mx-2">
-                                <a type="button" class="btn btn-outline-success" asp-controller="UploadFile" asp-action="Create" asp-route-id="@task.Id" asp-route-projectId="@task.ProjectId">Upload File</a>
-                            </div>
-                        }
-                        <div class="mx-2">
-                            <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Detail" asp-route-id="@task.Id">Detail</a>
                         </div>
                     </div>
                 </div>
             </div>
         }
+
     </div>
 </div>
 </body>

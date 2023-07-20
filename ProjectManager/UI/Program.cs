@@ -1,5 +1,6 @@
 using BLL.Abstractions.Interfaces;
 using BLL.Services;
+using Core.Enums;
 using Core.Helpers;
 using Core.Models;
 using DAL.Abstractions.Interfaces;
@@ -38,7 +39,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>().AddDefaultTokenProviders()
 // builder.Services.AddSession();
 // builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 //----
-// builder.Services.AddScoped<UserManager<AppUser>>();
+builder.Services.AddScoped<UserManager<AppUser>>();
 //----
 
 var app = builder.Build();
@@ -69,7 +70,7 @@ app.MapControllerRoute(
 //     endpoints.MapControllerRoute(
 //         name: "default",
 //         pattern: "{controller}/{action}/{id?}",
-//         defaults: new { controller = "User", action = "Index" });
+//         defaults: new { controller = "User", action = "Index"});
 //
 //     endpoints.MapControllerRoute(
 //         name: "unauthenticated",

@@ -19,11 +19,9 @@
             <p>
                 <h1>Registration</h1>
             </p>
-            @if (TempData["Error"] != null)
+            @if (ViewData["Error"] != null)
             {
-                <div class="col-md-12 alert alert-danger">
-                    <span><b>Sorry!</b> - @TempData["Error"]</span>
-                </div>
+                <p class="text-danger">@ViewData["Error"]</p>
             }
             <div class="py-2">
                 <form asp-action="Register">

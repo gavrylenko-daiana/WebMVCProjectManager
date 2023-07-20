@@ -21,6 +21,8 @@ public interface IGenericService<T>
     Task<T> GetByPredicate(Func<T, bool> predicate);
 
     Task Update(Guid id, T obj);
+    
+    Task UpdateIdentity(string id, T obj);
 
     string GetPasswordHash(string password);
     

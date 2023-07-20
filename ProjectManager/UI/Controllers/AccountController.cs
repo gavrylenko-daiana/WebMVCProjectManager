@@ -13,13 +13,15 @@ public class AccountController : Controller
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly IUserService _userService;
 
     public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-        RoleManager<IdentityRole> roleManager)
+        RoleManager<IdentityRole> roleManager, IUserService userService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -32,6 +34,11 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
+        if (TempData.ContainsKey("SuccessMessage"))
+        {
+            ViewData["SuccessMessage"] = TempData["SuccessMessage"].ToString();
+        }
+        
         if (!ModelState.IsValid) return View(loginViewModel);
 
         var user = await _userManager.FindByNameAsync(loginViewModel.UsernameOrEmailAddress) ??
@@ -101,7 +108,7 @@ public class AccountController : Controller
 
         if (!await _roleManager.RoleExistsAsync(UserRole.Tester.ToString()))
             await _roleManager.CreateAsync(new IdentityRole(UserRole.Tester.ToString()));
-        
+
         if (!await _roleManager.RoleExistsAsync(UserRole.Developer.ToString()))
             await _roleManager.CreateAsync(new IdentityRole(UserRole.Developer.ToString()));
 
@@ -128,5 +135,103 @@ public class AccountController : Controller
         }
 
         return RedirectToAction("Login", "Account");
+    }
+
+    [HttpGet]
+    public IActionResult ForgotPassword()
+    {
+        var forgotPasswordViewModel = new ForgotPasswordBeforeEnteringViewModel();
+
+        return View(forgotPasswordViewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ForgotPassword(
+        ForgotPasswordBeforeEnteringViewModel forgotPasswordBeforeEnteringViewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(forgotPasswordBeforeEnteringViewModel);
+        }
+
+        var user = await _userManager.FindByEmailAsync(forgotPasswordBeforeEnteringViewModel.Email);
+
+        if (user == null)
+        {
+            TempData["Error"] = "You wrote an incorrect email. Try again!";
+
+            return View(forgotPasswordBeforeEnteringViewModel);
+        }
+
+        var emailCode = await _userService.SendCodeToUser(forgotPasswordBeforeEnteringViewModel.Email);
+
+        return RedirectToAction("CheckEmailCode",
+            new { code = emailCode, email = forgotPasswordBeforeEnteringViewModel.Email });
+    }
+
+    [HttpGet]
+    public IActionResult CheckEmailCode(int code, string email)
+    {
+        var forgotPasswordCodeViewModel = new ForgotPasswordBeforeEnteringViewModel()
+        {
+            Email = email,
+        };
+
+        TempData["Code"] = code;
+
+        return View(forgotPasswordCodeViewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CheckEmailCode(int code,
+        ForgotPasswordBeforeEnteringViewModel forgotPasswordCodeViewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(forgotPasswordCodeViewModel);
+        }
+        
+        if (code == forgotPasswordCodeViewModel.EmailCode)
+        {
+            TempData["SuccessMessage"] = "Code is valid. You can reset your password.";
+
+            return RedirectToAction("ResetPassword", new { email = forgotPasswordCodeViewModel.Email });
+        }
+        else
+        {
+            TempData["Error"] = "Invalid code. Please try again.";
+
+            return RedirectToAction("Login", "Account");
+        }
+    }
+
+    [HttpGet]
+    public IActionResult ResetPassword(string email)
+    {
+        var resetPassword = new NewPasswordViewModel()
+        {
+            Email = email
+        };
+
+        return View(resetPassword);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ResetPassword(NewPasswordViewModel newPasswordViewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(newPasswordViewModel);
+        }
+
+        var user = await _userManager.FindByEmailAsync(newPasswordViewModel.Email);
+        
+        user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, newPasswordViewModel.NewPassword);
+
+        await _userManager.UpdateAsync(user);
+        await _userService.UpdateIdentity(user.Id, user);
+        
+        TempData["SuccessMessage"] = "Password has been reset successfully.";
+        return RedirectToAction("Login");
     }
 }

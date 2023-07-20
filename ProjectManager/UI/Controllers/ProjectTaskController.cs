@@ -147,7 +147,7 @@ public class ProjectTaskController : Controller
 
         if (existingProjectTask == null)
         {
-            TempData["Error"] = "Task not found.";
+            ModelState.AddModelError("", "Failed to get task");
             return RedirectToAction("Index", "ProjectTask");
         }
 

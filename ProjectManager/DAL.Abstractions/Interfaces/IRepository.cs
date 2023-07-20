@@ -17,6 +17,8 @@ public interface IRepository<T>
 
     Task<Result<bool>> UpdateAsync(Guid id, T updatedObj);
     
+    Task<Result<bool>> UpdateIdentityAsync(string id, T updatedObj);
+    
     Task<Result<bool>> DeleteAsync(Guid id);
     
     Task<Result<bool>> DeleteIdentityAsync(string id);

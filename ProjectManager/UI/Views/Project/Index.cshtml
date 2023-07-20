@@ -19,11 +19,14 @@
         @foreach (var project in Model)
         {
             <div class="list-group-item list-group-item-action my-2">
-                <div class="d-flex w-100 justify-content-between align-items-center">
-                    <h5 class="mb-0">@project.Name</h5>
-                    @* <h5 class="mb-0">@project.Id</h5> *@
-                    <small class="mr-2">@project.DueDates.ToString("d")</small>
-                    <div class="d-flex">
+                <div class="row">
+                    <div class="col-7">
+                        <h5 class="mb-0">@project.Name</h5>
+                    </div>
+                    <div class="col-3">
+                        <small class="mr-2">@project.DueDates.ToString("d")</small>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end" style="white-space: nowrap;">
                         @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.StakeHolder.ToString()))
                         {
                             var projectSh = project.UserProjects.Where(p => p.User.UserName == User.Identity.Name).ToList();
