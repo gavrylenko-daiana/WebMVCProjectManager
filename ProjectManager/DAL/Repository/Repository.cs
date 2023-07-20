@@ -101,6 +101,28 @@ namespace DAL.Repository
                 return new Result<bool>(false, ex.Message);
             }
         }
+        
+        public async Task<Result<bool>> UpdateIdentityAsync(string id, T updatedObj)
+        {
+            try
+            {
+                var entity = await _dbSet.FindAsync(id);
+               
+                if (entity == null)
+                {
+                    return new Result<bool>(false, $"Entity with Id {id} not found.");
+                }
+
+                _context.Entry(entity).CurrentValues.SetValues(updatedObj);
+                await _context.SaveChangesAsync();
+                
+                return new Result<bool>(true);
+            }
+            catch (Exception ex)
+            {
+                return new Result<bool>(false, ex.Message);
+            }
+        }
 
         public async Task<Result<bool>> DeleteAsync(Guid id)
         {
