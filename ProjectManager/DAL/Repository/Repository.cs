@@ -11,10 +11,12 @@ namespace DAL.Repository
     {
         private readonly ApplicationContext _context;
         private readonly DbSet<T> _dbSet;
+        private readonly UserManager<AppUser> _userManager;
 
-        public Repository(ApplicationContext context)
+        public Repository(ApplicationContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
             _dbSet = context.Set<T>();
         }
 
@@ -107,12 +109,13 @@ namespace DAL.Repository
             try
             {
                 var entity = await _dbSet.FindAsync(id);
-               
+                    
                 if (entity == null)
                 {
                     return new Result<bool>(false, $"Entity with Id {id} not found.");
                 }
 
+                await _userManager.UpdateAsync((entity as AppUser)!);
                 _context.Entry(entity).CurrentValues.SetValues(updatedObj);
                 await _context.SaveChangesAsync();
                 
@@ -152,8 +155,7 @@ namespace DAL.Repository
                 
                 if (entity != null)
                 {
-                    _dbSet.Remove(entity);
-                    await _context.SaveChangesAsync();
+                    await _userManager.DeleteAsync((entity as AppUser)!);
                 }
 
                 return new Result<bool>(true);

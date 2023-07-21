@@ -207,12 +207,29 @@ public class DeveloperService : GenericService<AppUser>, IDeveloperService
         try
         {
             var tasks = await GetDeveloperTasks(developer);
-            await _projectTaskService.DeleteDeveloperFromTasksAsync(tasks);
+            await _projectTaskService.DeleteDeveloperFromTasksAsync(tasks, developer);
+            await DeleteDeveloperFromProject(tasks, developer);
             await DeleteIdentity(developer.Id);
         }
         catch (Exception ex)
         {
             throw new Exception(ex.Message);
+        }
+    }
+
+    private async Task DeleteDeveloperFromProject(List<ProjectTask> tasks, AppUser developer)
+    {
+        foreach (var task in tasks)
+        {
+            var project = await _projectService.GetById(task.ProjectId);
+            
+            var userProject = project.UserProjects.FirstOrDefault(ut => ut.User != null && ut.User.Id == developer.Id);
+
+            if (userProject != null)
+            {
+                project.UserProjects.Remove(userProject);
+                await _projectService.Update(project.Id, project);
+            }
         }
     }
 

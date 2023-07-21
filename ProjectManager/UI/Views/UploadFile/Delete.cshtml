@@ -9,7 +9,7 @@
 </head>
 <body>
 <div>
-    <form action="Delete" method="post">
+    <form asp-controller="UploadFile" asp-action="Delete" method="post">
         <input type="hidden" asp-for="Id"/>
         <div class="container py-4">
             <h1>Are you sure that you want <br>to delete this file?</h1>

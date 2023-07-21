@@ -93,7 +93,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         {
             var tasks = (await GetAll()).Where(t =>
                 t.AssignedUsers.Any(ut => ut.User.Role == UserRole.Developer) &&
-                t.AssignedUsers.Any(ut => ut.UserId == developer.Id && t.Progress == Progress.InProgress)).ToList();
+                t.AssignedUsers.Any(ut => ut.UserId == developer.Id)).ToList();
 
             return tasks;
         }
@@ -231,7 +231,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task DeleteDeveloperFromTasksAsync(List<ProjectTask> tasks)
+    public async Task DeleteDeveloperFromTasksAsync(List<ProjectTask> tasks, AppUser developer)
     {
         if (tasks == null) throw new ArgumentNullException(nameof(tasks));
 
@@ -241,10 +241,11 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
             {
                 foreach (var task in tasks)
                 {
-                    var userTask = task.AssignedUsers.FirstOrDefault(ut => ut.User.Role == UserRole.Developer);
-                    
+                    var userTask = task.AssignedUsers.FirstOrDefault(ut => ut.User != null && ut.User.Id == developer.Id);
+
                     if (userTask != null)
                     {
+                        task.Progress = Progress.Planned;
                         task.AssignedUsers.Remove(userTask);
                         await Update(task.Id, task);
                     }

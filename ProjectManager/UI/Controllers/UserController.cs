@@ -1,4 +1,5 @@
 using BLL.Abstractions.Interfaces;
+using Core.Enums;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +10,21 @@ namespace UI.Controllers;
 public class UserController : Controller
 {
     private readonly UserManager<AppUser> _userManager;
+    private readonly SignInManager<AppUser> _signInManager;
     private readonly IUserService _userService;
+    private readonly ITesterService _testerService;
+    private readonly IDeveloperService _developerService;
+    private readonly IStakeHolderService _stakeHolderService;
 
-    public UserController(UserManager<AppUser> userManager, IUserService userService)
+    public UserController(UserManager<AppUser> userManager, IUserService userService, ITesterService testerService,
+        IDeveloperService developerService, IStakeHolderService stakeHolderService, SignInManager<AppUser> signInManager)
     {
         _userManager = userManager;
         _userService = userService;
+        _testerService = testerService;
+        _developerService = developerService;
+        _stakeHolderService = stakeHolderService;
+        _signInManager = signInManager;
     }
 
     [HttpGet]
@@ -50,7 +60,7 @@ public class UserController : Controller
             Username = user.UserName,
             Email = user.Email
         };
-        
+
         return View(editUserViewModel);
     }
 
@@ -60,7 +70,7 @@ public class UserController : Controller
         if (!ModelState.IsValid)
         {
             ModelState.AddModelError("", "Failed to edit profile");
-            
+
             return View("Edit", editUserViewModel);
         }
 
@@ -74,12 +84,11 @@ public class UserController : Controller
         user.UserName = editUserViewModel.Username;
         user.Email = editUserViewModel.Email;
 
-        await _userManager.UpdateAsync(user);
         await _userService.UpdateIdentity(user.Id, user);
 
         return RedirectToAction("Index", "User", new { user.Id });
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> EditPassword()
     {
@@ -91,7 +100,7 @@ public class UserController : Controller
         }
 
         var editUserPasswordViewModel = new EditUserPasswordViewModel();
-        
+
         return View(editUserPasswordViewModel);
     }
 
@@ -102,7 +111,7 @@ public class UserController : Controller
         if (!ModelState.IsValid)
         {
             ModelState.AddModelError("editUserPasswordViewModel", "Failed to edit profile");
-            
+
             return View("EditPassword", editUserPasswordViewModel);
         }
 
@@ -112,7 +121,7 @@ public class UserController : Controller
         {
             return View("Error");
         }
-        
+
         var checkPassword = await _userManager.CheckPasswordAsync(user, editUserPasswordViewModel.CurrentPassword);
 
         if (checkPassword)
@@ -120,9 +129,34 @@ public class UserController : Controller
             user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, editUserPasswordViewModel.NewPassword);
         }
 
-        await _userManager.UpdateAsync(user);
         await _userService.UpdateIdentity(user.Id, user);
 
         return RedirectToAction("Index", "User", new { user.Id });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null) return View("Error");
+
+        return View(user);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    public async Task<IActionResult> DeleteUser()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null) return View("Error");
+
+        if (user.Role == UserRole.StakeHolder) await _stakeHolderService.DeleteStakeHolder(user);
+        else if (user.Role == UserRole.Developer) await _developerService.DeleteDeveloperFromTasks(user);
+        else if (user.Role == UserRole.Tester) await _testerService.DeleteTesterAsync(user);
+        
+        await _signInManager.SignOutAsync();
+
+        return RedirectToAction("Login", "Account");
     }
 }

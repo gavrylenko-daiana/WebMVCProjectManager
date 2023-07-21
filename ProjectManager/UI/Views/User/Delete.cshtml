@@ -1,18 +1,17 @@
 @using Core.Models
-@model Project
+@model AppUser
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>Delete Project</title>
+    <title>Delete</title>
 </head>
 <body>
 <div class="container py-4">
-    <h1>Are you sure that you want <br>to delete "@Model.Name"?</h1>
+    <h1>Are you sure that you want <br>to delete your account, @Model.UserName?</h1>
     <div class="form-group">
-        <form asp-controller="Project" asp-action="Delete" method="post">
-            <input type="hidden" asp-for="Id"/>
+        <form method="post" asp-controller="User" asp-action="Delete">
             <input type="submit" value="Confirm" class="btn btn-danger float-right mt-3"/>
         </form>
     </div>

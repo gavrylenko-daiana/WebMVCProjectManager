@@ -34,7 +34,7 @@ public interface IProjectTaskService : IGenericService<ProjectTask>
 
     Task DeleteTask(ProjectTask task);
 
-    Task DeleteDeveloperFromTasksAsync(List<ProjectTask> tasks);
+    Task DeleteDeveloperFromTasksAsync(List<ProjectTask> tasks, AppUser developer);
 
     Task<DateTime> CreateDueDateForTask(Project project, string[] date);
     
