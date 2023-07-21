@@ -29,7 +29,7 @@
                             @if (User.Identity.IsAuthenticated && User.IsInRole(UserRole.StakeHolder.ToString()))
                             {
                                 var taskSh = task.AssignedUsers.Where(p => p.User.UserName == User.Identity.Name).ToList();
-                                @if (taskSh.Any(p => p.ProjectTaskId == task.Id))
+                                @if (taskSh.Any(p => p.ProjectTaskId == task.Id) && task.Progress != Progress.CompletedTask)
                                 {
                                     <div class="mx-2">
                                         <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Delete" asp-route-id="@task.Id">Delete</a>

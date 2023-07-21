@@ -216,7 +216,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
                 foreach (var task in tasks)
                 {
                     var userTask = task.AssignedUsers.FirstOrDefault(ut => ut.User.Role == UserRole.Tester);
-                    
+
                     if (userTask != null)
                     {
                         task.AssignedUsers.Remove(userTask);
@@ -241,11 +241,16 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
             {
                 foreach (var task in tasks)
                 {
-                    var userTask = task.AssignedUsers.FirstOrDefault(ut => ut.User != null && ut.User.Id == developer.Id);
+                    var userTask =
+                        task.AssignedUsers.FirstOrDefault(ut => ut.User != null && ut.User.Id == developer.Id);
 
                     if (userTask != null)
                     {
-                        task.Progress = Progress.Planned;
+                        if (task.Progress != Progress.CompletedTask)
+                        {
+                            task.Progress = Progress.Planned;
+                        }
+
                         task.AssignedUsers.Remove(userTask);
                         await Update(task.Id, task);
                     }
@@ -358,7 +363,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
     public async Task<ProjectTask> CreateTaskWithoutTesterAndStakeHolderTestAsync(ProjectTask projectTask)
     {
         if (projectTask == null) throw new ArgumentNullException(nameof(projectTask));
-        
+
         try
         {
             var task = new ProjectTask
@@ -379,12 +384,13 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
         }
     }
 
-    public async Task<ProjectTask> CreateTaskAsync(ProjectTask projectTask, AppUser tester, AppUser stakeHolder, Project project)
+    public async Task<ProjectTask> CreateTaskAsync(ProjectTask projectTask, AppUser tester, AppUser stakeHolder,
+        Project project)
     {
         if (tester == null) throw new ArgumentNullException(nameof(tester));
         if (stakeHolder == null) throw new ArgumentNullException(nameof(stakeHolder));
         if (project == null) throw new ArgumentNullException(nameof(project));
-        
+
         try
         {
             var task = new ProjectTask
@@ -395,7 +401,7 @@ public class ProjectTaskService : GenericService<ProjectTask>, IProjectTaskServi
                 Priority = projectTask.Priority,
                 ProjectId = projectTask.ProjectId
             };
-            
+
             await Add(task);
             await _userTask.AddUserTask(stakeHolder, task);
             await _userTask.AddUserTask(tester, task);
