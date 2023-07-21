@@ -3,6 +3,7 @@ using Core.Enums;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using UI.ViewModels;
 
 namespace UI.Controllers;
 
@@ -56,6 +57,14 @@ public class StakeHolderController : Controller
     [HttpGet]
     public async Task<IActionResult> ReturnTask(Guid id)
     {
+        var returnTask = new ReturnTaskViewModel();
+
+        return View(returnTask);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ReturnTask(Guid id, ReturnTaskViewModel returnTaskViewModel)
+    {
         var task = await _projectTaskService.GetById(id);
         await _testerService.ReturnTaskInProgress(task);
         var stakeHolder = await _userManager.GetUserAsync(User);
@@ -66,7 +75,7 @@ public class StakeHolderController : Controller
 
             if (developer != null)
                 await _userService.SendMessageEmailUserAsync(developer.Email,
-                    $"{developer.UserName},\nThe stakeHolder - '{stakeHolder.UserName}' returned the task for which you were responsible - '{task.Name}'.");
+                    $"{developer.UserName},\nThe stakeHolder - '{stakeHolder.UserName}' returned the task for which you were responsible - '{task.Name}'. The reason is - '{returnTaskViewModel.Note}'");
         }
         
         return RedirectToAction("CompletedProject", "StakeHolder");
