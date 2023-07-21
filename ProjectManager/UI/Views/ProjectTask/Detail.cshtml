@@ -25,17 +25,19 @@
                 <div class="my-2">
                     <h6 class="mb-1">Task Users:</h6>
                     <ul class="list-group">
-                        @foreach (var userProject in Model.AssignedUsers)
+                        @foreach (var userTask in Model.AssignedUsers)
                         {
                             <li class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">
                                     <div>
-                                        <h6 class="mb-0">@userProject.User.UserName</h6>
-                                        <small>@userProject.User.Email</small>
+                                        <h6 class="mb-0">@userTask.User.UserName</h6>
+                                        <small>@userTask.User.Email</small>
                                     </div>
-                                    <small class="text-uppercase">@userProject.User.Role</small>
+                                    <div>
+                                        <small class="text-uppercase">@userTask.User.Role</small>
+                                        <a type="button" class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@userTask.User.Id">Detail</a>
+                                    </div>
                                 </div>
-                                @* <a href="@Url.Action("Details", "AppUser", new { id = userProject.User.Id })" class="btn btn-primary btn-sm">Detail</a> *@
                             </li>
                         }
                     </ul>

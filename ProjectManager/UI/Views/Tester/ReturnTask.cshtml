@@ -1,0 +1,29 @@
+@using UI.ViewModels
+@model ReturnTaskViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete ProjectTask</title>
+</head>
+<body>
+<div class="container py-4">
+    <h1>Write the reason why you are returning the task for redoing.</h1>
+    <div class="form-group">
+        <form asp-controller="Tester" asp-action="ReturnTask" method="post">
+            <div class="form-group">
+                <label asp-for="Note" class="control-label"></label>
+                <input asp-for="Note" class="form-control">
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-start mt-2">
+                <div class="confirm-btn">
+                    <input type="submit" value="Confirm" class="btn btn-danger">
+                </div>
+                <a class="btn btn-outline-dark ml-2" asp-controller="Tester" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -75,9 +75,11 @@
                                         <h6 class="mb-0">@userProject.User.UserName</h6>
                                         <small>@userProject.User.Email</small>
                                     </div>
-                                    <small class="text-uppercase">@userProject.User.Role</small>
+                                    <div>
+                                        <small class="text-uppercase">@userProject.User.Role</small>
+                                        <a type="button" class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@userProject.User.Id">Detail</a>
+                                    </div>
                                 </div>
-                                @* <a href="@Url.Action("Details", "AppUser", new { id = userProject.User.Id })" class="btn btn-primary btn-sm">Detail</a> *@
                             </li>
                         }
                     </ul>

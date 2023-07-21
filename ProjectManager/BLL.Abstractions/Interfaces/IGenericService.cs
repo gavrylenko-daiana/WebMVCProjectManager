@@ -23,6 +23,8 @@ public interface IGenericService<T>
     Task Update(Guid id, T obj);
     
     Task UpdateIdentity(string id, T obj);
+    
+    Task UpdateIdentityUserName(string id, T obj, string userName);
 
     string GetPasswordHash(string password);
     

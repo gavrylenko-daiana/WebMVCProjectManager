@@ -1,4 +1,5 @@
 using BLL.Abstractions.Interfaces;
+using Core.Enums;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +12,15 @@ public class DeveloperController : Controller
     private readonly IProjectTaskService _projectTaskService;
     private readonly UserManager<AppUser> _userManager;
     private readonly IProjectService _projectService;
+    private readonly IUserService _userService;
 
-    public DeveloperController(IDeveloperService developerService, IProjectService projectService, UserManager<AppUser> userManager, IProjectTaskService projectTaskService)
+    public DeveloperController(IDeveloperService developerService, IProjectService projectService, UserManager<AppUser> userManager, IProjectTaskService projectTaskService, IUserService userService)
     {
         _developerService = developerService;
         _projectService = projectService;
         _userManager = userManager;
         _projectTaskService = projectTaskService;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -37,7 +40,7 @@ public class DeveloperController : Controller
         var currentDeveloper = await _userManager.GetUserAsync(User);
 
         await _developerService.TakeTaskByDeveloper(task, currentDeveloper, project);
-        // Send to mail
+        await _userService.SendMessageEmailUserAsync(currentDeveloper.Email, $"{currentDeveloper.UserName},\nyou have taken the task - '{task.Name}'.\nThe deadline is {task.DueDates}.");
 
         return RedirectToAction("Index", "ProjectTask");
     }
@@ -47,7 +50,17 @@ public class DeveloperController : Controller
     {
         var task = await _projectTaskService.GetById(id);
         await _developerService.UpdateProgressToWaitTester(task);
-        // Send to mail
+        
+        var developer = task.AssignedUsers.FirstOrDefault(ut => ut.User.Role == UserRole.Developer)?.User;
+        
+        if (developer != null)
+            await _userService.SendMessageEmailUserAsync(developer.Email, $"{developer.UserName},\nYour task - '{task.Name}' has been sent to the tester for review by another developer.\nPlease wait for a response.");
+        
+        var tester = task.AssignedUsers.FirstOrDefault(ut => ut.User.Role == UserRole.Tester)?.User;
+
+        if (tester != null)
+            await _userService.SendMessageEmailUserAsync(tester.Email,
+                $"{tester.UserName},\nA new task - '{task.Name} is waiting for you to check.");
         
         return RedirectToAction("Index", "Developer");
     }

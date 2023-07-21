@@ -11,16 +11,14 @@ public class UserController : Controller
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
-    private readonly IUserService _userService;
     private readonly ITesterService _testerService;
     private readonly IDeveloperService _developerService;
     private readonly IStakeHolderService _stakeHolderService;
 
-    public UserController(UserManager<AppUser> userManager, IUserService userService, ITesterService testerService,
+    public UserController(UserManager<AppUser> userManager, ITesterService testerService,
         IDeveloperService developerService, IStakeHolderService stakeHolderService, SignInManager<AppUser> signInManager)
     {
         _userManager = userManager;
-        _userService = userService;
         _testerService = testerService;
         _developerService = developerService;
         _stakeHolderService = stakeHolderService;
@@ -35,7 +33,7 @@ public class UserController : Controller
         var userViewModel = new UserViewModel()
         {
             Id = currentUser.Id,
-            Username = currentUser.UserName,
+            UserName = currentUser.UserName,
             Email = currentUser.Email,
             Role = currentUser.Role,
             UserProjects = currentUser.UserProjects,
@@ -43,6 +41,30 @@ public class UserController : Controller
         };
 
         return View(userViewModel);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> Detail(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+
+        if (user == null)
+        {
+            TempData["Error"] = "Entered incorrect data. Please try again.";
+            return RedirectToAction("Index", "Project");
+        }
+
+        var detailUser = new AppUser()
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            Email = user.Email,
+            Role = user.Role,
+            UserProjects = user.UserProjects,
+            AssignedTasks = user.AssignedTasks
+        };
+
+        return View(detailUser);
     }
 
     [HttpGet]
@@ -57,7 +79,7 @@ public class UserController : Controller
 
         var editUserViewModel = new EditUserViewModel()
         {
-            Username = user.UserName,
+            UserName = user.UserName,
             Email = user.Email
         };
 
@@ -70,25 +92,25 @@ public class UserController : Controller
         if (!ModelState.IsValid)
         {
             ModelState.AddModelError("", "Failed to edit profile");
-
+    
             return View("Edit", editUserViewModel);
         }
-
+    
         var user = await _userManager.GetUserAsync(User);
-
+    
         if (user == null)
         {
             return View("Error");
         }
 
-        user.UserName = editUserViewModel.Username;
+        user.UserName = editUserViewModel.UserName;
         user.Email = editUserViewModel.Email;
-
-        await _userService.UpdateIdentity(user.Id, user);
-
+        
+        await _userManager.UpdateAsync(user);
+        
         return RedirectToAction("Index", "User", new { user.Id });
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> EditPassword()
     {
@@ -129,7 +151,7 @@ public class UserController : Controller
             user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, editUserPasswordViewModel.NewPassword);
         }
 
-        await _userService.UpdateIdentity(user.Id, user);
+        await _userManager.UpdateAsync(user);
 
         return RedirectToAction("Index", "User", new { user.Id });
     }

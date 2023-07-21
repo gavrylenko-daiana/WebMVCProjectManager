@@ -230,8 +230,10 @@ public class AccountController : Controller
 
         await _userManager.UpdateAsync(user);
         await _userService.UpdateIdentity(user.Id, user);
+        await _signInManager.SignOutAsync();
         
         TempData["SuccessMessage"] = "Password has been reset successfully.";
+        
         return RedirectToAction("Login");
     }
 }

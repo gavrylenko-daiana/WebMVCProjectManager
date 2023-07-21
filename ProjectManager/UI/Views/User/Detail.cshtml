@@ -1,5 +1,5 @@
-@using UI.ViewModels
-@model UserViewModel
+@using Core.Models
+@model AppUser
 
 <!DOCTYPE html>
 <html>
@@ -13,6 +13,7 @@
             <div class="card">
                 <div class="card-header text-center">
                     <h4>User Profile</h4>
+                    @* <h3 class="mb-1">@Model.Id</h3> *@
                 </div>
                 <div class="card-body">
                     <div class="form-group py-2">
@@ -52,20 +53,10 @@
                             </ul>
                         </div>
                     }
-                    @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.UserName)
-                    {
-                        <div class="py-2">
-                            <a class="nav-link text-dark btn btn-outline-primary" asp-controller="User" asp-action="Edit">Edit</a>
-                        </div>
-                        <div class="py-2">
-                            <a class="nav-link text-dark btn btn-outline-danger" asp-controller="User" asp-action="Delete">Delete account</a>
-                        </div>
-                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>
