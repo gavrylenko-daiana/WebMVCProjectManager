@@ -32,17 +32,9 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 });
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddDefaultTokenProviders().AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationContext>().AddSignInManager<SignInManager<AppUser>>();
-
-// builder.Services.AddMemoryCache();
-// builder.Services.AddSession();
-// builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-//----
 builder.Services.AddScoped<UserManager<AppUser>>();
-//----
 
 var app = builder.Build();
-
-// await Seed.SeedData(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -62,17 +54,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
-
-// app.UseEndpoints(endpoints =>
-// {
-//     endpoints.MapControllerRoute(
-//         name: "default",
-//         pattern: "{controller}/{action}/{id?}",
-//         defaults: new { controller = "User", action = "Index"});
-//
-//     endpoints.MapControllerRoute(
-//         name: "unauthenticated",
-//         pattern: "{controller=Account}/{action=Register}/{id?}");
-// });
 
 app.Run();

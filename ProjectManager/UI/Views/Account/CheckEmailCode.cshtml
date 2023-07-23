@@ -13,9 +13,13 @@
         <div class="col-md-6">
             <h1>Enter the code came to your email</h1>
             <div class="py-2">
+                @if (TempData["Error"] != null)
+                {
+                    <p class="text-danger">@TempData["Error"]</p>
+                }
                 <form method="post" asp-controller="Account" asp-action="CheckEmailCode">
                     <input type="hidden" asp-for="Email" value="@Model.Email"/>
-                    <input type="hidden" name="code" value="@TempData["Code"]" />
+                    <input type="hidden" name="code" value="@TempData["Code"]"/>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="EmailCode" class="control-label"></label>

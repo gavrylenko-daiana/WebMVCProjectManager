@@ -34,11 +34,6 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
-        if (TempData.ContainsKey("SuccessMessage"))
-        {
-            ViewData["SuccessMessage"] = TempData["SuccessMessage"].ToString();
-        }
-        
         if (!ModelState.IsValid) return View(loginViewModel);
 
         var user = await _userManager.FindByNameAsync(loginViewModel.UsernameOrEmailAddress) ??
@@ -190,11 +185,9 @@ public class AccountController : Controller
         {
             return View(forgotPasswordCodeViewModel);
         }
-        
+
         if (code == forgotPasswordCodeViewModel.EmailCode)
         {
-            TempData["SuccessMessage"] = "Code is valid. You can reset your password.";
-
             return RedirectToAction("ResetPassword", new { email = forgotPasswordCodeViewModel.Email });
         }
         else
@@ -208,6 +201,8 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult ResetPassword(string email)
     {
+        TempData["SuccessMessage"] = "Code is valid. You can reset your password.";
+
         var resetPassword = new NewPasswordViewModel()
         {
             Email = email
@@ -225,15 +220,10 @@ public class AccountController : Controller
         }
 
         var user = await _userManager.FindByEmailAsync(newPasswordViewModel.Email);
-        
         user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, newPasswordViewModel.NewPassword);
-
         await _userManager.UpdateAsync(user);
-        await _userService.UpdateIdentity(user.Id, user);
         await _signInManager.SignOutAsync();
-        
-        TempData["SuccessMessage"] = "Password has been reset successfully.";
-        
+
         return RedirectToAction("Login");
     }
 }

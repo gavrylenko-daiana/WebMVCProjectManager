@@ -22,6 +22,4 @@ public interface IUserService : IGenericService<AppUser>
     Task<ProjectTask> GetTaskByNameAsync(string taskName);
 
     Task AddNewUser(string userName, string userEmail, string password, UserRole role);
-
-    // Task<UserRole> GetRole(string role, int choice);
 }

@@ -19,9 +19,9 @@
             <p>
                 <h1>Registration</h1>
             </p>
-            @if (ViewData["Error"] != null)
+            @if (TempData["Error"] != null)
             {
-                <p class="text-danger">@ViewData["Error"]</p>
+                <p class="text-danger">@TempData["Error"]</p>
             }
             <div class="py-2">
                 <form asp-action="Register">

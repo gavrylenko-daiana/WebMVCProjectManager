@@ -91,7 +91,7 @@ public class UserController : Controller
     {
         if (!ModelState.IsValid)
         {
-            ModelState.AddModelError("", "Failed to edit profile");
+            ModelState.AddModelError("editUserViewModel", "Failed to edit profile");
     
             return View("Edit", editUserViewModel);
         }
