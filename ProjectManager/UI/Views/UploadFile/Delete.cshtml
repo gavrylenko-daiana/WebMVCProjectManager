@@ -1,0 +1,42 @@
+@using Core.Models
+@model TaskFile
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Delete file from task</title>
+</head>
+<body>
+<div>
+    <form asp-controller="UploadFile" asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id"/>
+        <div class="container py-4">
+            <h1>Are you sure that you want <br>to delete this file?</h1>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="card">
+                        <img alt="Image" src="@Model.FilePath" class="card-img-top img-fluid" style="max-height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h6 class="card-title">@Model.FileName</h6>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#imageModal_@Model.Id">View</button>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="imageModal_@Model.Id" tabindex="-1" aria-labelledby="imageModalLabel_@Model.Id" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <img alt="Image" src="@Model.FilePath" class="img-fluid" style="max-height: 500px; object-fit: contain;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Confirm" class="btn btn-danger float-right"/>
+            <a class="btn btn-outline-dark" asp-controller="ProjectTask" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

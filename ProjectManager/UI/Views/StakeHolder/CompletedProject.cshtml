@@ -1,0 +1,52 @@
+@using Core.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Core.Enums
+@model IEnumerable<Project>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Projects</title>
+</head>
+<body>
+<div class="container py-4">
+    <h3> - Click "Approve" to mark the project as completed</h3>
+    <h3> - Click "Return task" to send the task for rework</h3>
+    <div class="list-group">
+        @foreach (var project in Model)
+        {
+            <div class="list-group-item list-group-item-action my-2">
+                <div class="d-flex w-100 justify-content-between">
+                    <h3 class="mb-1">@project.Name</h3>
+                    @* <h3 class="mb-1">@Model.Id</h3> *@
+                    <small>@project.DueDates.ToString("d")</small>
+                </div>
+                <p class="mb-1">@project.Description</p>
+                <p class="mb-1">Count of done tasks: @project.CountDoneTasks / @project.Tasks.Count</p>
+                <div class="d-flex w-100 justify-content-between">
+                    <p class="mb-1">Progress: @project.Progress</p>
+                </div>
+                @if (project.Tasks.Any())
+                {
+                    @foreach (var task in project.Tasks)
+                    {
+                        <div class="d-flex justify-content-between align-items-end my-2">
+                            <small>Task: <br> @task.Name</small>
+                            <div class="d-flex ml-auto">
+                                <div>
+                                    <a type="button" class="btn btn-outline-success" asp-controller="StakeHolder" asp-action="Approve" asp-route-id="@project.Id">Approve</a>
+                                    <a type="button" class="btn btn-outline-danger" asp-controller="StakeHolder" asp-action="ReturnTask" asp-route-id="@task.Id">Return task</a>
+                                </div>
+                                <div class="mx-2">
+                                    <a type="button" class="btn btn-outline-primary" asp-controller="ProjectTask" asp-action="Detail" asp-route-id="@task.Id">Detail</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </div>
+</div>
+</body>
+</html>

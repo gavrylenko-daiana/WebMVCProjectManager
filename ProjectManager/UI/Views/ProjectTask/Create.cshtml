@@ -1,0 +1,64 @@
+@using UI.ViewModels
+@using Core.Enums
+@using Core.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Collections
+@model CreateProjectTaskViewModel
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Create Task</title>
+</head>
+<body>
+<div class="container py-4">
+    <h1>Create new Task</h1>
+    <form method="post" asp-controller="ProjectTask" asp-action="Create" enctype="multipart/form-data">
+        <input type="hidden" asp-for="ProjectId" value="@ViewData["projectId"]"/>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control"/>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DueDates">Deadline</label>
+            <input asp-for="DueDates" class="form-control" placeholder="DueDates" type="date" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" max="@(((DateTime)ViewData["DueDates"]).ToString("yyyy-MM-dd"))">
+            <span asp-validation-for="DueDates" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Priority" class="control-label">Priority:</label>
+            <select asp-for="Priority" class="form-control">
+                @foreach (var priority in Enum.GetValues(typeof(Priority)))
+                {
+                    <option value="@priority">@priority</option>
+                }
+            </select>
+            <span asp-validation-for="Priority" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="TesterId" class="control-label">Tester:</label>
+            <select asp-for="TesterId" class="form-control">
+                @foreach (var tester in (IEnumerable<AppUser>)ViewData["AllTester"])
+                {
+                    <option value="@tester.Id">@tester.UserName</option>
+                }
+            </select>
+            <span asp-validation-for="TesterId" class="text-danger"></span>
+        </div>
+        <div class="py-2">
+            <div class="form-group">
+                <input class="btn btn-outline-primary" type="submit" value="Create"/>
+                <a class="btn btn-outline-dark" asp-controller="Project" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

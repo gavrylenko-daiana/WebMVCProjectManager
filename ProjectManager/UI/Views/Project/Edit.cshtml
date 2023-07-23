@@ -1,0 +1,38 @@
+@using UI.ViewModels
+@model EditProjectViewModel
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Edit Project</title>
+</head>
+<body>
+<div class="container py-5">
+    <h1>Edit @Model.Name</h1>
+    <form method="post" asp-controller="Project" asp-action="Edit" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" placeholder="Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <input asp-for="Description" class="form-control" placeholder="Description">
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DueDates">Deadline</label>
+            <input asp-for="DueDates" class="form-control" placeholder="DueDates" type="date" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")">
+            <span asp-validation-for="DueDates" class="text-danger"></span>
+        </div>
+        <div class="py-2">
+            <div class="form-group">
+                <input class="btn btn-outline-primary" type="submit" value="Edit"/>
+                <a class="btn btn-outline-dark" asp-controller="Project" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

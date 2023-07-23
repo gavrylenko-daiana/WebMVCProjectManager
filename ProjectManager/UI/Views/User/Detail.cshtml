@@ -1,0 +1,62 @@
+@using Core.Models
+@model AppUser
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>User Profile</h4>
+                    @* <h3 class="mb-1">@Model.Id</h3> *@
+                </div>
+                <div class="card-body">
+                    <div class="form-group py-2">
+                        <label asp-for="UserName" class="control-label"></label>
+                        <input asp-for="UserName" class="form-control" id="UserName" value="@Model.UserName" readonly>
+                    </div>
+                    <div class="form-group py-2">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" id="Email" value="@Model.Email" readonly>
+                    </div>
+                    <div class="form-group py-2">
+                        <label asp-for="Role" class="control-label"></label>
+                        <input asp-for="Role" class="form-control" id="Role" value="@Model.Role.ToString()" readonly>
+                    </div>
+                    @if (@Model.UserProjects.Any())
+                    {
+                        <div class="form-group py-2">
+
+                            <label asp-for="UserProjects" class="control-label"></label>
+                            <ul class="list-group">
+                                @foreach (var project in Model.UserProjects)
+                                {
+                                    <li class="list-group-item">@project.Project.Name</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    @if (@Model.AssignedTasks.Any())
+                    {
+                        <div class="form-group py-2">
+                            <label asp-for="AssignedTasks" class="control-label"></label>
+                            <ul class="list-group">
+                                @foreach (var task in Model.AssignedTasks)
+                                {
+                                    <li class="list-group-item">@task.ProjectTask.Name</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

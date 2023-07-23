@@ -1,0 +1,80 @@
+@using Core.Models
+@model ProjectTask
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Detail Project</title>
+</head>
+<body>
+<div class="container py-4">
+    <div class="list-group">
+        <div class="list-group-item list-group-item-action my-2">
+            <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">@Model.Name</h3>
+                <small>@Model.DueDates.ToString("d")</small>
+            </div>
+            <p class="mb-1">@Model.Description</p>
+            <p class="mb-1">Priority: @Model.Priority</p>
+            <div class="d-flex w-100 justify-content-between">
+                <p class="mb-1">Progress: @Model.Progress</p>
+            </div>
+            @if (Model.AssignedUsers.Any())
+            {
+                <div class="my-2">
+                    <h6 class="mb-1">Task Users:</h6>
+                    <ul class="list-group">
+                        @foreach (var userTask in Model.AssignedUsers)
+                        {
+                            <li class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <div>
+                                        <h6 class="mb-0">@userTask.User.UserName</h6>
+                                        <small>@userTask.User.Email</small>
+                                    </div>
+                                    <div>
+                                        <small class="text-uppercase">@userTask.User.Role</small>
+                                        <a type="button" class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@userTask.User.Id">Detail</a>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+            @if (Model.UploadedFiles != null && Model.UploadedFiles.Count > 0)
+            {
+                <div>
+                    <h5>Uploaded Files:</h5>
+                    <div class="row">
+                        @foreach (var file in Model.UploadedFiles)
+                        {
+                            <div class="col-md-3 mb-3">
+                                <div class="card">
+                                    <img alt="Image" src="@file.FilePath" class="card-img-top img-fluid" style="max-height: 200px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title">@file.FileName</h6>
+                                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#imageModal_@file.Id">View</button>
+                                        <a class="btn btn-outline-danger btn-sm" asp-controller="UploadFile" asp-action="Delete" asp-route-id="@file.Id">Delete</a>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="imageModal_@file.Id" tabindex="-1" aria-labelledby="imageModalLabel_@file.Id" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <img alt="Image" src="@file.FilePath" class="img-fluid" style="max-height: 500px; object-fit: contain;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+</body>
+</html>

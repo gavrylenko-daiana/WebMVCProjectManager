@@ -1,0 +1,79 @@
+@using UI.ViewModels
+@using Core.Enums
+@model EditProjectTaskViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit ProjectTask</title>
+</head>
+<body>
+<div class="container py-5">
+    <h1>Edit @Model.Name</h1>
+    <form method="post" asp-controller="ProjectTask" asp-action="Edit" enctype="multipart/form-data">
+        <input type="hidden" asp-for="ProjectId" value="@ViewData["projectId"]"/>
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" placeholder="Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <input asp-for="Description" class="form-control" placeholder="Description">
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DueDates">Deadline</label>
+            <input asp-for="DueDates" class="form-control" placeholder="DueDates" type="date" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" max="@(((DateTime)ViewData["DueDates"]).ToString("yyyy-MM-dd"))">
+            <span asp-validation-for="DueDates" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Priority" class="control-label">Priority:</label>
+            <select asp-for="Priority" class="form-control">
+                @foreach (var priorityValue in Enum.GetValues(typeof(Priority)))
+                {
+                    <option value="@priorityValue">@priorityValue</option>
+                }
+            </select>
+            <span asp-validation-for="Priority" class="text-danger"></span>
+        </div>
+        @if (Model.UploadedFiles != null && Model.UploadedFiles.Count > 0)
+        {
+            <div>
+                <h5>Uploaded Files:</h5>
+                <div class="row">
+                    @foreach (var file in Model.UploadedFiles)
+                    {
+                        <div class="col-md-3 mb-3">
+                            <div class="card">
+                                <img alt="Image" src="@file.FilePath" class="card-img-top img-fluid" style="max-height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h6 class="card-title">@file.FileName</h6>
+                                    <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#imageModal_@file.Id">View</button>
+                                    <a class="btn btn-outline-danger btn-sm" asp-controller="UploadFile" asp-action="Delete" asp-route-id="@file.Id">Delete</a>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="imageModal_@file.Id" tabindex="-1" aria-labelledby="imageModalLabel_@file.Id" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <img alt="Image" src="@file.FilePath" class="img-fluid" style="max-height: 500px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <div class="py-2">
+            <div class="form-group">
+                <input class="btn btn-outline-primary" type="submit" value="Edit"/>
+                <a class="btn btn-outline-dark" asp-controller="Project" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

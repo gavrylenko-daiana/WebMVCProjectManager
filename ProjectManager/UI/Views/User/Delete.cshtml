@@ -1,0 +1,21 @@
+@using Core.Models
+@model AppUser
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Delete</title>
+</head>
+<body>
+<div class="container py-4">
+    <h1>Are you sure that you want <br>to delete your account, @Model.UserName?</h1>
+    <div class="form-group">
+        <form method="post" asp-controller="User" asp-action="Delete">
+            <input type="submit" value="Confirm" class="btn btn-danger float-right"/>
+            <a class="btn btn-outline-dark" asp-controller="User" asp-action="Index">Cancel</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>
